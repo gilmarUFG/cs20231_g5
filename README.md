@@ -18,15 +18,19 @@ Esta API será construída pelos componentes do grupo 5:
 
 ### Requisitos Funcionais
 
-1. RF001 - <descrever>
-2. RF002 - <descrever>
-3. RF003 - <descrever>
-4. RF004 - <descrever>
-5. RF005 - <descrever>
+1. **RF001 - Cadastro de Usuário**: permite que um usuário se cadastre na plataforma para avaliar os produtos. Os dados necessários para o cadastro são nome, e-mail e senha.
+2. **RF002 - Cadastro de Produto**: permite que um administrador cadastre um produto na plataforma para ser avaliado pelos usuários. Os dados necessários para o cadastro são nome do produto, descrição, categoria e preço.
+3. **RF003 - Listagem de Produtos**: permite que os usuários visualizem uma lista de todos os produtos cadastrados na plataforma.
+4. **RF004 - Avaliação de Produto**: permite que os usuários avaliem os produtos cadastrados na plataforma. Os dados necessários para a avaliação são o ID do usuário, o ID do produto e a nota (de 6 a 5 estrelas).
+5. **RF005 - Média de Avaliações de Produto**: permite que os usuários visualizem a média das avaliações de um produto cadastrado na plataforma.
 
 ### Requisitos Não Funcionais
 
-<Descrever os requisitos não funcionais identificados no mesmo modelo da descrição dos requisitos funcionais>
+1. **RNF001 - Segurança**: a plataforma AvalieAqui deve garantir a segurança das informações dos usuários e dos produtos cadastrados, bem como a privacidade das avaliações realizadas pelos usuários.>
+2. **RNF002 - <Performance**: a plataforma AvalieAqui deve ter uma boa performance, garantindo que os usuários possam acessar e utilizar a plataforma de forma rápida e eficiente, mesmo em momentos de pico de acesso.
+3. **RNF003 - Escalabilidade**: a plataforma AvalieAqui deve ser escalável, permitindo que possa suportar um grande número de usuários e produtos cadastrados sem comprometer a sua performance.
+4. **RNF004 - <Usabilidade**: a plataforma AvalieAqui deve ser fácil de usar e intuitiva para os usuários, permitindo que possam realizar as suas avaliações de forma rápida e eficiente.
+5. **RNF005 - Disponibilidade**: a plataforma AvalieAqui deve estar disponível para acesso dos usuários durante a maior parte do tempo, visando garantir que as avaliações possam ser realizadas a qualquer momento. Para isso, deve ter um bom tempo de atividade (uptime) e um sistema de backup e recuperação de dados eficiente em caso de falhas.
 
 ### Regras de Negócio
 
@@ -36,15 +40,6 @@ Esta API será construída pelos componentes do grupo 5:
 
 ### Tecnologia de _Front-end_
 A tecnologia utilizada no front-end será VueJS com NuxtJS, utilizando javascript
-=======
-
-1. RN01 - <descrever>
-2. RN02 - <descrever>
-
-<Adicionar outras regras, se existirem.>
-
-### Tecnologia de _Front-end_
-<Descrever a tecnologia que será utilizada no _front-end_.>
 
 ### Tecnologia de _Back-end_
 Nodejs com o framework NestJs, utilizando typescript
@@ -54,9 +49,6 @@ Banco de dados PostgreSQL
 
 ### Local do _Deploy_
 O deploy será feito em uma instância Amazon EC2, um serviço AWS
-=======
-
-<Descrever onde será feito o _deploy_ da API.>
 
 ### Cronograma de Desenvolvimento
 
