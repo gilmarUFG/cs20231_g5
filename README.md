@@ -29,7 +29,7 @@ Esta API será construída pelos componentes do grupo 5:
 <Descrever os requisitos não funcionais identificados no mesmo modelo da descrição dos requisitos funcionais>
 
 ### Regras de Negócio
-<<<<<<< HEAD
+
 1. RN01 - Usuários não podem avaliar o mesmo produto mais de uma vez: o sistema deve validar se o usuário já avaliou o produto antes de permitir que ele faça uma nova avaliação.
 2. RN02 - Usuários precisam estar logados para avaliar um produto: o sistema deve exigir que o usuário faça login antes de permitir que ele faça uma avaliação.
 3. RN03 - O usuário só pode criar e ter uma única conta no sistema de avaliação de produtos (validar pelo CPF e e-mail).
@@ -44,25 +44,19 @@ A tecnologia utilizada no front-end será VueJS com NuxtJS, utilizando javascrip
 <Adicionar outras regras, se existirem.>
 
 ### Tecnologia de _Front-end_
-
 <Descrever a tecnologia que será utilizada no _front-end_.>
->>>>>>> c74c1d91fceef252801fe8839e8e54178ffd50a1
 
 ### Tecnologia de _Back-end_
-
 Nodejs com o framework NestJs, utilizando typescript
 
 ### Tecnologia de Persistência de Dados
-
 Banco de dados PostgreSQL
 
 ### Local do _Deploy_
-<<<<<<< HEAD
 O deploy será feito em uma instância Amazon EC2, um serviço AWS
 =======
 
 <Descrever onde será feito o _deploy_ da API.>
->>>>>>> c74c1d91fceef252801fe8839e8e54178ffd50a1
 
 ### Cronograma de Desenvolvimento
 
