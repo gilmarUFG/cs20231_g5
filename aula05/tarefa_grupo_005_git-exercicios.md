@@ -75,16 +75,39 @@ Responda as questões abaixo (exercite os comandos do git correspondentes). Lemb
 
 18. Quando se cria dois arquivos usando um editor de texto qualquer e, na sequência, executamos o comando **git add -u**, os dois arquivos criados passam de _untracked_ para _new file_?
 
+Somente os arquivos que foram rastreados e modificados anteriormente são adicionados ao índice pelo comando git add -u; arquivos que não foram rastreados anteriormente não são adicionados.
+
 19. Qual o efeito da execução dos dois comandos abaixo, nesta ordem, em um dado repositório?
-    **git reset --soft HEAD~1**
-    **git reset --hard**
+**git reset --soft HEAD~1**
+**git reset --hard**
+
+Git reset --soft HEAD1 redefine HEAD para o commit anterior, deixando as modificações no diretório de trabalho. O segundo comando 'git reset --hard' desfaz as modificações feitas no diretório de trabalho, retornando o repositório ao seu estado anterior.
+
 20. Após o emprego de um ambiente integrado de desenvolvimento (IDE), é comum a criação de arquivos e diretórios. Qual o comando que podemos empregar para remover arquivos e diretórios _untracked_?
+
+Você pode usar o comando 'git clean -f -d' para excluir arquivos e pastas não rastreados.
+
 21. Qual o nome do arquivo no qual podemos inserir a indicação para o Git de arquivos e diretórios a serem ignorados?
+
+O nome do arquivo é `.gitignore`.
+
 22. Quando se cria o arquivo _MinhaClasse.class_ em um dado diretório e desejamos que arquivos com a extensão .class, como neste caso, sejam ignorados por todos os membros de uma equipe que estão contribuindo com um dado projeto, como devemos proceder?
+
+Você pode adicionar a linha '*.class' ao arquivo '.gitignore' para excluir arquivos com a extensão '.class'.
+
 23. jQuery é uma famosa biblioteca em JavaScript. Consulte detalhes em [jQuery](http://jquery.com). O repositório correspondente encontra-se em [gitRep](https://github.com/jquery/jquery.git). Faça o clone deste repositório.
+
+Você pode usar o comando 'git clone https://github.com/jquery/jquery.git' em seu terminal para copiar o repositório jQuery.
+
 24. No repositório **jqueryrepo**, criado no passo anterior, qual o efeito do comando
-    **git shortlog -sne**?
+**git shortlog -sne**?
+
+Uma lista de todos os autores que contribuíram para o repositório, classificados pela quantidade de commits que fizeram, é produzida pelo comando 'git shortlog -sne'. O endereço de e-mail de cada autor está incluído na lista.
+
 25. No repositório **jqueryrepo**, qual o efeito de **git remote -v**?
+
+O comando 'git remote -v' exibe uma lista dos repositórios remotos configurados para o repositório local, junto com seus nomes e URLs de URL.
+
 26. Um repositório Git pode ser etiquetado ao longo do tempo. Ou seja, _commits_ específicos podem ser “marcados” ou “etiquetados” para facilitar referências posteriores. Para listar todas as “etiquetas” (_tags_) estabelecidas para um dado repositório, qual comando deve ser executado?
     - O comando git tag é usado para exibir todas as tags instaladas no repositório.
 27. Caso um dado repositório retorne muitas “marcas” ou “etiquetas” para o comando **git tag**, como retornar apenas aquelas que atendem a determinado padrão, por exemplo, iniciadas por 2.0?
