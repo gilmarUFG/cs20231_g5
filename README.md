@@ -48,10 +48,34 @@ Nodejs com o framework NestJs, utilizando typescript
 Banco de dados PostgreSQL
 
 ### Local do _Deploy_
-O deploy será feito em uma instância Amazon EC2, um serviço AWS
+O deploy será feito em um servidor próprio
 
 ### Cronograma de Desenvolvimento
 
-| Iteração | Tarefa                            | Data Início | Data Fim   | Responsável  | Situação   |
-| -------- | --------------------------------- | ----------- | ---------- | ------------ | ---------- |
-| 1        | Especificar História de Usuário 1 | 02/05/2023  | 03/05/2023 | Paulo Victor | Programada |
+| Iteração | Tarefa                                                                         | Data Início | Data Fim   | Responsável                | Situação   |
+| -------- | ------------------------------------------------------------------------------ | ----------- | ---------- | -------------------------- | ---------- |
+| 1        | Planejamento                                                                   | 17/07/2023  | 05/05/2023 | Todos                      | Concluída
+| 2        | Definição do modelo de classes/objetos envolvidos                              | 06/05/2023  | 19/05/2023 | Todos                      | Programada
+| 2        | Definição de modelo de dados (mapeamento ORM)                                  | 06/05/2023  | 19/05/2023 | Todos                      | Programada
+| 2        | Criação da base do projeto (API/BackEnd)                                       | 06/05/2023  | 19/05/2023 | Artur, Henrique e Paulo    | Programada
+| 2        | Criação da base do projeto (FrontEnd)                                          | 06/05/2023  | 19/05/2023 | Alany e Filipe             | Programada
+| 3        | Implementação do cadastro de usuário (API/BackEnd)                             | 20/05/2023  | 02/06/2023 | Artur, Henrique e Paulo    | Programada
+| 3        | Implementação do cadastro de usuário (FrontEnd)                                | 20/05/2023  | 02/06/2023 | Alany e Filipe             | Programada
+| 3        | Implementação do login de usuário (API/BackEnd)                                | 20/05/2023  | 02/06/2023 | Artur, Henrique e Paulo    | Programada
+| 3        | Implementação do login de usuário (FrontEnd)                                   | 20/05/2023  | 02/06/2023 | Alany e Filipe             | Programada
+| 4        | Implementação do cadastro de produto (API/BackEnd)                             | 03/06/2023  | 16/06/2023 | Artur, Henrique e Paulo    | Programada
+| 4        | Implementação do cadastro de produto (FrontEnd)                                | 03/06/2023  | 16/06/2023 | Alany e Filipe             | Programada
+| 4        | Implementação da listagem de produtos cadastrados (API/BackEnd)                | 03/06/2023  | 16/06/2023 | Artur, Henrique e Paulo    | Programada
+| 4        | Implementação da listagem de produtos cadastrados(FrontEnd)                    | 03/06/2023  | 16/06/2023 | Alany e Filipe             | Programada
+| 5        | Implementação da avaliação de produto (API/BackEnd)                            | 17/06/2023  | 30/06/2023 | Artur, Henrique e Paulo    | Programada
+| 5        | Implementação da avaliação de produto (FrontEnd)                               | 17/06/2023  | 30/06/2023 | Alany e Filipe             | Programada
+| 5        | Implementação da consulta da média das avaliações de um produto (API/BackEnd)  | 17/06/2023  | 30/06/2023 | Artur, Henrique e Paulo    | Programada
+| 5        | Implementação da consulta da média das avaliações de um produto (FrontEnd)     | 17/06/2023  | 30/06/2023 | Alany e Filipe             | Programada
+| 6        | Implementação da atualização de informações do usuário (API/BackEnd)           | 01/07/2023  | 01/07/2023 | Artur, Henrique e Paulo    | Programada
+| 6        | Implementação da atualização de informações do usuário (FrontEnd)              | 01/07/2023  | 01/07/2023 | Alany e Filipe             | Programada
+| 6        | Implementação da atualização de informações de produtos (API/BackEnd)          | 01/07/2023  | 01/07/2023 | Artur, Henrique e Paulo    | Programada
+| 6        | Implementação da atualização de informações de produtos (FrontEnd)             | 01/07/2023  | 01/07/2023 | Alany e Filipe             | Programada
+| 7        | Criação de Testes (API/BackEnd)                                                | 22/07/2023  | 11/08/2023 | Artur, Henrique e Paulo    | Programada
+| 7        | Criação de Testes (FrontEnd)                                                   | 22/07/2023  | 11/08/2023 | Alany e Filipe             | Programada
+| 7        | Correções de possíveis bugs (API/BackEnd)                                      | 22/07/2023  | 11/08/2023 | Artur, Henrique e Paulo    | Programada
+| 7        | Correções de possíveis bugs (FrontEnd)                                         | 22/07/2023  | 11/08/2023 | Alany e Filipe             | Programada
