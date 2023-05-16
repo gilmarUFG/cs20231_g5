@@ -13,7 +13,11 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  // Cadastrar um novo usuário
+  /**
+   * Cadastrar um novo usuário
+   * @param UserRegisterDto
+   * @returns User
+   */
   async register(dto: UserRegisterDto) {
     // Verificar se o email já existe
     if (await this.emailExists(dto.email)) {
