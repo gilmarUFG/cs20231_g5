@@ -1,13 +1,7 @@
-import {
-  ForbiddenException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
-import { UserRegisterDto } from './dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { RegisterUserDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 @Injectable()
 export class UserService {
@@ -15,12 +9,12 @@ export class UserService {
 
   /**
    * Cadastrar um novo usuário
-   * @param UserRegisterDto
+   * @param RegisterUserDto
    * @returns User
    */
-  async register(dto: UserRegisterDto) {
+  async register(registerUserDto: RegisterUserDto) {
     // Verificar se o email já existe
-    if (await this.emailExists(dto.email)) {
+    if (await this.emailExists(registerUserDto.email)) {
       throw new HttpException(
         'O Email especificado já está em uso.',
         HttpStatus.FORBIDDEN,
@@ -28,7 +22,7 @@ export class UserService {
     }
 
     // Verificar se o CPF já existe
-    if (await this.cpfExists(dto.cpf)) {
+    if (await this.cpfExists(registerUserDto.cpf)) {
       throw new HttpException(
         'O CPF especificado já está em uso.',
         HttpStatus.FORBIDDEN,
@@ -36,21 +30,20 @@ export class UserService {
     }
 
     // Criptografar a senha
-    const hash = await bcrypt.hash(dto.password, 10);
+    const hash = await bcrypt.hash(registerUserDto.password, 10);
 
     // Remover os caracteres não numéricos do CPF
-    const cpf = dto.cpf.replace(/\D/g, '');
+    const cpf = registerUserDto.cpf.replace(/\D/g, '');
 
     // Substituir a senha do DTO pelo hash
-    dto = { ...dto, cpf: cpf, password: hash };
+    registerUserDto = { ...registerUserDto, cpf: cpf, password: hash };
 
     try {
       // Cadastrar o usuário
-      const user = await this.prisma.user.create({
-        data: dto,
+      let user = await this.prisma.user.create({
+        data: registerUserDto,
         select: {
           id: true,
-          createdAt: true,
         },
       });
 
@@ -65,8 +58,10 @@ export class UserService {
     }
   }
 
+  // --------------------------------------------------
+
   // Verifica se o email já existe
-  async emailExists(email: string) {
+  private async emailExists(email: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         email: email,
@@ -77,7 +72,7 @@ export class UserService {
   }
 
   // Verifica se o CPF já existe
-  async cpfExists(cpf: string) {
+  private async cpfExists(cpf: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         cpf: cpf,

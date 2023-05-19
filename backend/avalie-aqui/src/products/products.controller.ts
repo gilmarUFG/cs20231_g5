@@ -1,13 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiAcceptedResponse, ApiForbiddenResponse } from '@nestjs/swagger';
+import {
+  ApiAcceptedResponse,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+} from '@nestjs/swagger';
+import { CreateProductDto, UpdateProductDto } from './dto';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  // Cadastra um novo produto
   @Post()
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
@@ -18,7 +30,7 @@ export class ProductsController {
           example: {
             id: 1,
             createdAt: '2021-08-31T00:00:00.000Z',
-            message: 'produto cadastrado com sucesso.',
+            message: 'Produto cadastrado com sucesso.',
           },
         },
       },
@@ -38,6 +50,21 @@ export class ProductsController {
       },
     },
   })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Erro ao cadastrar o produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            statusCode: 500,
+            message:
+              'Não foi possível cadastrar o produto. Tente novamente mais tarde.',
+          },
+        },
+      },
+    },
+  })
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
@@ -52,7 +79,7 @@ export class ProductsController {
           example: {
             id: 1,
             createdAt: '2021-08-31T00:00:00.000Z',
-            message: 'listagem de produtos ocncluída com sucesso.',
+            message: 'listagem de produtos concluída com sucesso.',
           },
         },
       },
@@ -66,7 +93,7 @@ export class ProductsController {
         schema: {
           example: {
             statusCode: 403,
-            message: 'Houve um erro na litagem de produtos',
+            message: 'Houve um erro na listagem de produtos',
           },
         },
       },
@@ -94,7 +121,8 @@ export class ProductsController {
   })
   @ApiForbiddenResponse({
     // Documentação da resposta pro swagger
-    description: 'Produto inexistente ou há algo errado na recuperação de dados desse produto',
+    description:
+      'Produto inexistente ou há algo errado na recuperação de dados desse produto',
     content: {
       'application/json': {
         schema: {
@@ -110,7 +138,7 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
     description: 'Produto alterado com Sucesso',
@@ -128,7 +156,8 @@ export class ProductsController {
   })
   @ApiForbiddenResponse({
     // Documentação da resposta pro swagger
-    description: 'Não foi possível alterar este produto, verifique suas permissões e/ou as caractetísticas do produto',
+    description:
+      'Não foi possível alterar este produto, verifique suas permissões e/ou as caractetísticas do produto',
     content: {
       'application/json': {
         schema: {
