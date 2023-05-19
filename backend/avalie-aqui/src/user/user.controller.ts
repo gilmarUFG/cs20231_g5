@@ -1,7 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserRegisterDto } from './dto';
-import { ApiAcceptedResponse, ApiForbiddenResponse } from '@nestjs/swagger';
+import { RegisterUserDto } from './dto';
+import {
+  ApiAcceptedResponse,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+} from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -17,7 +21,6 @@ export class UserController {
         schema: {
           example: {
             id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
             message: 'Usuário cadastrado com sucesso.',
           },
         },
@@ -38,7 +41,22 @@ export class UserController {
       },
     },
   })
-  register(@Body() dto: UserRegisterDto) {
-    return this.userService.register(dto);
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Erro ao cadastrar o usuário',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            statusCode: 500,
+            message:
+              'Não foi possível cadastrar o usuário. Tente novamente mais tarde.',
+          },
+        },
+      },
+    },
+  })
+  register(@Body() registerUserDto: RegisterUserDto) {
+    return this.userService.register(registerUserDto);
   }
 }
