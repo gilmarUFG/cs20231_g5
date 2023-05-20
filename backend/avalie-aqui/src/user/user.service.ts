@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import * as bcrypt from 'bcrypt';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -40,7 +40,7 @@ export class UserService {
 
     try {
       // Cadastrar o usuário
-      let user = await this.prisma.user.create({
+      const user = await this.prisma.user.create({
         data: registerUserDto,
         select: {
           id: true,
@@ -80,5 +80,14 @@ export class UserService {
     });
 
     return !!user;
+  }
+
+  //Busca usuário pelo email
+  async getByEmail(email: string) {
+    return await this.prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
   }
 }
