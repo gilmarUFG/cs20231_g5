@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto';
 import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+import { JwtUserPayload } from './auth.types';
 import { UserService } from 'src/user/user.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
@@ -14,13 +15,9 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async validateUser(
-    email: string,
-    password: string,
-  ): Promise<Omit<User, 'password'>> {
+  async validateUser(email: string): Promise<Omit<User, 'password'>> {
     const user = await this.userService.getByEmail(email);
-    const hash = await bcrypt.hash(password, 10);
-    if (user && user.password === hash) {
+    if (user) {
       const { password, ...result } = user;
       return result;
     }
@@ -35,9 +32,12 @@ export class AuthService {
         email: email,
       },
     });
-    const hash = await bcrypt.hash(password, 10);
-    if (user && user.password === hash) {
-      const payload = { id: user.id, email: user.email, name: user.name };
+    if (user && bcrypt.compare(password, user.password)) {
+      const payload: JwtUserPayload = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      };
       return { access_token: this.jwtService.sign(payload) };
     } else {
       throw new UnauthorizedException(
