@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import {
@@ -14,12 +15,17 @@ import {
   ApiInternalServerErrorResponse,
 } from '@nestjs/swagger';
 import { CreateProductDto, UpdateProductDto } from './dto';
+import {
+  JwtUserAuthGuard,
+  JwtAdminAuthGuard,
+} from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   // Cadastra um novo produto
+  @UseGuards(JwtUserAuthGuard)
   @Post()
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
@@ -69,6 +75,7 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
+  @UseGuards(JwtUserAuthGuard)
   @Get()
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
@@ -103,6 +110,7 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
+  @UseGuards(JwtUserAuthGuard)
   @Get(':id')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
@@ -138,6 +146,7 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
+  @UseGuards(JwtUserAuthGuard)
   @Put(':id')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
@@ -173,6 +182,7 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto);
   }
 
+  @UseGuards(JwtUserAuthGuard)
   @Delete(':id')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
