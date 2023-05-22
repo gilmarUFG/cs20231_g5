@@ -58,6 +58,33 @@ export class UserService {
     }
   }
 
+  /**
+   * Obter os dados de um usuário pelo ID
+   * @param id number
+   * @returns object
+   */
+  getUser(id: number) {
+    // TODO: Verificar se o usuário é o mesmo que está logado (obter o usuário logado do guard e comparar com o id)
+    if (true) {
+      return this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          cpf: true,
+        },
+      });
+    } else {
+      throw new HttpException(
+        'Só é possível visualizar os seus próprios dados.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
   // --------------------------------------------------
 
   // Verifica se o email já existe

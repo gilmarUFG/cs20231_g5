@@ -12,6 +12,24 @@ async function bootstrap() {
     .setTitle('AvalieAqui')
     .setDescription('Descrição da API do AvalieAqui')
     .setVersion('0.1')
+    .addBearerAuth(
+      {
+        description: 'Token de acesso do usuário',
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'User access-token',
+    )
+    .addBearerAuth(
+      {
+        description: 'Token de acesso do administrador',
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'Admin access-token',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

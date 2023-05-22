@@ -11,7 +11,9 @@ import {
 import { ProductsService } from './products.service';
 import {
   ApiAcceptedResponse,
+  ApiBearerAuth,
   ApiForbiddenResponse,
+  ApiHeader,
   ApiInternalServerErrorResponse,
 } from '@nestjs/swagger';
 import { CreateProductDto, UpdateProductDto } from './dto';
@@ -25,8 +27,9 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   // Cadastra um novo produto
-  @UseGuards(JwtUserAuthGuard)
   @Post()
+  @UseGuards(JwtAdminAuthGuard)
+  @ApiBearerAuth('Admin access-token')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
     description: 'Produto cadastrado com Sucesso',
@@ -75,7 +78,6 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
-  @UseGuards(JwtUserAuthGuard)
   @Get()
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
@@ -110,7 +112,6 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
-  @UseGuards(JwtUserAuthGuard)
   @Get(':id')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
@@ -146,8 +147,9 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
-  @UseGuards(JwtUserAuthGuard)
   @Put(':id')
+  @UseGuards(JwtAdminAuthGuard)
+  @ApiBearerAuth('Admin access-token')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
     description: 'Produto alterado com Sucesso',
@@ -182,8 +184,9 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto);
   }
 
-  @UseGuards(JwtUserAuthGuard)
   @Delete(':id')
+  @UseGuards(JwtAdminAuthGuard)
+  @ApiBearerAuth('Admin access-token')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
     description: 'Produto excluido com Sucesso',
