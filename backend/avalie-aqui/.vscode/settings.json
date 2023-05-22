@@ -1,5 +1,6 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "folding-decorators.autoFold": true
+  "folding-decorators.autoFold": true,
+  "editor.tabSize": 2
 }

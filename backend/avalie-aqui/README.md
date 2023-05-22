@@ -50,6 +50,14 @@ npx prisma migrate dev
 - Este comando já ira gerar o Prisma Client com as alterações
   - Para gerar o Prisma Client manualmente, execute `npx prisma generate`
 
+#### Rodar seeders
+
+```
+npm run seed
+```
+
+- Este comando irá popular o banco de dados com dados aleatórios
+
 #### Iniciar servidor de desenvolvimento
 
 ```
