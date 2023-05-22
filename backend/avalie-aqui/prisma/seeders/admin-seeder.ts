@@ -15,6 +15,8 @@ export async function adminSeeder(prisma: PrismaClient, qty = 5) {
     password: await bcrypt.hash(faker.internet.password(), 10),
   });
 
+  console.log('Executando seeders de admins');
+
   // Cadastrar o admin padrão
   await prisma.adminUser.create({
     data: {

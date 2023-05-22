@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker/locale/pt_BR';
-import { slugify } from 'src/util/functions';
+import { slugify } from '../../src/util/functions';
 
 /**
  * Insere a quantidade especificada de produtos aleatórios no banco de dados
@@ -14,6 +14,8 @@ export async function productSeeder(prisma: PrismaClient, qty = 10) {
     category: slugify(faker.commerce.department()),
     image_url: faker.image.url(),
   });
+
+  console.log('Executando seeders de produtos');
 
   // Cadastrar os produtos aleatórios
   for (let i = 0; i < qty; i++) {

@@ -8,4 +8,5 @@ done
 
 >&2 echo "Postgres carregado"
 bash -c "npx prisma migrate dev"
+bash -c "npm run seed:docker"
 exec "$@"

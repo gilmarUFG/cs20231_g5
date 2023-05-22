@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker/locale/pt_BR';
 import * as bcrypt from 'bcrypt';
-import fakerbr from 'faker-br';
+const fakerbr = require('faker-br');
 
 /**
  * Insere a quantidade especificada de usuários aleatórios no banco de dados
@@ -16,6 +16,8 @@ export async function userSeeder(prisma: PrismaClient, qty = 10) {
     cpf: fakerbr.br.cpf(),
     password: await bcrypt.hash(faker.internet.password(), 10),
   });
+
+  console.log('Executando seeders de usuários');
 
   // Cadastrar o usuário padrão
   await prisma.user.create({
