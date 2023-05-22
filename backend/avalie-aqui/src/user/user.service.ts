@@ -1,13 +1,7 @@
-import {
-  ForbiddenException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
-import { UserRegisterDto } from './dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { RegisterUserDto } from './dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -15,12 +9,12 @@ export class UserService {
 
   /**
    * Cadastrar um novo usuário
-   * @param UserRegisterDto
+   * @param RegisterUserDto
    * @returns User
    */
-  async register(dto: UserRegisterDto) {
+  async register(registerUserDto: RegisterUserDto) {
     // Verificar se o email já existe
-    if (await this.emailExists(dto.email)) {
+    if (await this.emailExists(registerUserDto.email)) {
       throw new HttpException(
         'O Email especificado já está em uso.',
         HttpStatus.FORBIDDEN,
@@ -28,7 +22,7 @@ export class UserService {
     }
 
     // Verificar se o CPF já existe
-    if (await this.cpfExists(dto.cpf)) {
+    if (await this.cpfExists(registerUserDto.cpf)) {
       throw new HttpException(
         'O CPF especificado já está em uso.',
         HttpStatus.FORBIDDEN,
@@ -36,21 +30,20 @@ export class UserService {
     }
 
     // Criptografar a senha
-    const hash = await bcrypt.hash(dto.password, 10);
+    const hash = await bcrypt.hash(registerUserDto.password, 10);
 
     // Remover os caracteres não numéricos do CPF
-    const cpf = dto.cpf.replace(/\D/g, '');
+    const cpf = registerUserDto.cpf.replace(/\D/g, '');
 
     // Substituir a senha do DTO pelo hash
-    dto = { ...dto, cpf: cpf, password: hash };
+    registerUserDto = { ...registerUserDto, cpf: cpf, password: hash };
 
     try {
       // Cadastrar o usuário
       const user = await this.prisma.user.create({
-        data: dto,
+        data: registerUserDto,
         select: {
           id: true,
-          createdAt: true,
         },
       });
 
@@ -65,8 +58,37 @@ export class UserService {
     }
   }
 
+  /**
+   * Obter os dados de um usuário pelo ID
+   * @param id number
+   * @returns object
+   */
+  getUser(id: number) {
+    // TODO: Verificar se o usuário é o mesmo que está logado (obter o usuário logado do guard e comparar com o id)
+    if (true) {
+      return this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          cpf: true,
+        },
+      });
+    } else {
+      throw new HttpException(
+        'Só é possível visualizar os seus próprios dados.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  // --------------------------------------------------
+
   // Verifica se o email já existe
-  async emailExists(email: string) {
+  private async emailExists(email: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         email: email,
@@ -77,7 +99,7 @@ export class UserService {
   }
 
   // Verifica se o CPF já existe
-  async cpfExists(cpf: string) {
+  private async cpfExists(cpf: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         cpf: cpf,
@@ -85,5 +107,14 @@ export class UserService {
     });
 
     return !!user;
+  }
+
+  //Busca usuário pelo email
+  async getByEmail(email: string) {
+    return await this.prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
   }
 }

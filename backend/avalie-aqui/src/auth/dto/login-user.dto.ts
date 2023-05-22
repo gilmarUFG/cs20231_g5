@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsCPF } from 'brazilian-class-validator';
 import {
   IsString,
   IsNotEmpty,
@@ -8,33 +7,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class UserRegisterDto {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(150)
-  @ApiProperty({
-    description: 'Nome do Usuário',
-    type: 'string',
-    example: 'João da Silva',
-    minLength: 3,
-    maxLength: 150,
-    required: true,
-  })
-  name: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsCPF()
-  @ApiProperty({
-    description: 'CPF do Usuário',
-    type: 'string',
-    example: '69796737000',
-    format: '99999999999 ou 999.999.999-99',
-    required: true,
-  })
-  cpf: string;
-
+export class LoginUserDto {
   @IsString()
   @IsNotEmpty()
   @IsEmail()
