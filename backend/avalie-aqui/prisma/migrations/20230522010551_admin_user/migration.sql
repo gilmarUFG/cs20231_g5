@@ -12,6 +12,3 @@ CREATE TABLE "admin_users" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "admin_users_email_key" ON "admin_users"("email");
-
--- senha avalieaqui123
-INSERT INTO admin_users (email, name, password) VALUES ('admin@avalieaqui.com', 'Admin', '$2b$10$G9V9S6WES7N5pLa0ezlzieVK4rZGsSkqYkcI6pUV2oNDju1tEF0Mi');

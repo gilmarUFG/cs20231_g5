@@ -85,18 +85,29 @@ export class ProductsController {
     content: {
       'application/json': {
         schema: {
-          example: {
-            id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
-            message: 'listagem de produtos concluída com sucesso.',
-          },
+          example: [
+            {
+              id: 1,
+              name: 'RTX 4060 Ti',
+              category: 'placa-de-video',
+              image_url:
+                'https://files.tecnoblog.net/wp-content/uploads/2023/05/geforce-rtx-4060-ti-back-1060x795.jpg',
+            },
+            {
+              id: 2,
+              name: 'Elden Ring Official Strategy Guide',
+              category: 'livro',
+              image_url:
+                'https://m.media-amazon.com/images/I/41N2TM5JAaL._SY498_BO1,204,203,200_.jpg',
+            },
+          ],
         },
       },
     },
   })
   @ApiForbiddenResponse({
     // Documentação da resposta pro swagger
-    description: 'Houve um erro na litagem de produtos',
+    description: 'Houve um erro na listagem de produtos',
     content: {
       'application/json': {
         schema: {
@@ -121,8 +132,10 @@ export class ProductsController {
         schema: {
           example: {
             id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
-            message: 'Produto encontrado com sucesso.',
+            name: 'RTX 4060 Ti',
+            category: 'placa-de-video',
+            image_url:
+              'https://files.tecnoblog.net/wp-content/uploads/2023/05/geforce-rtx-4060-ti-back-1060x795.jpg',
           },
         },
       },
@@ -157,8 +170,6 @@ export class ProductsController {
       'application/json': {
         schema: {
           example: {
-            id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
             message: 'Produto alterado com sucesso.',
           },
         },
@@ -195,7 +206,6 @@ export class ProductsController {
         schema: {
           example: {
             id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
             message: 'Produto excluído com sucesso.',
           },
         },

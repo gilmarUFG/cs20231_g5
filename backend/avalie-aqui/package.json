@@ -12,6 +12,8 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "seed": "ts-node prisma/seed.ts",
+    "seed:docker": "ts-node prisma/seed.ts --docker",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -40,6 +42,7 @@
     "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.1",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
@@ -55,6 +58,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "faker-br": "^0.4.1",
     "jest": "29.5.0",
     "prettier": "^2.3.2",
     "prisma": "^4.14.1",
