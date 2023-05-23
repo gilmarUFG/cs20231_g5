@@ -1,11 +1,13 @@
 version: '3.8'
 services:
   api:
-    container_name: "avalieaqui_api"
-    image: "avalieaqui_api"
+    container_name: 'avalieaqui_api'
+    image: 'avalieaqui_api'
     build:
       context: .
-    entrypoint: ["./wait-for-postgres.sh", "npm", "run", "start:prod"]
+    env_file:
+      - docker.env
+    entrypoint: ['./wait-for-postgres.sh', 'npm', 'run', 'start:prod']
     ports:
       - 4000:4000
     networks:
@@ -28,7 +30,7 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - "./pgdata:/var/lib/postgresql/data"
+      - './pgdata:/var/lib/postgresql/data'
 
 networks:
   avalieaqui-network:

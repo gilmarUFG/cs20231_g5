@@ -11,17 +11,16 @@ import {
 import { ProductsService } from './products.service';
 import {
   ApiAcceptedResponse,
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
-  ApiHeader,
   ApiInternalServerErrorResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { CreateProductDto, UpdateProductDto } from './dto';
-import {
-  JwtUserAuthGuard,
-  JwtAdminAuthGuard,
-} from 'src/auth/guards/jwt-auth.guard';
+import { JwtAdminAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -38,7 +37,6 @@ export class ProductsController {
         schema: {
           example: {
             id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
             message: 'Produto cadastrado com sucesso.',
           },
         },
@@ -52,7 +50,6 @@ export class ProductsController {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
             message: 'Já existe um produto com esse nome cadastrado',
           },
         },
@@ -66,7 +63,6 @@ export class ProductsController {
       'application/json': {
         schema: {
           example: {
-            statusCode: 500,
             message:
               'Não foi possível cadastrar o produto. Tente novamente mais tarde.',
           },
@@ -105,14 +101,13 @@ export class ProductsController {
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiInternalServerErrorResponse({
     // Documentação da resposta pro swagger
     description: 'Houve um erro na listagem de produtos',
     content: {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
             message: 'Houve um erro na listagem de produtos',
           },
         },
@@ -141,16 +136,27 @@ export class ProductsController {
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiBadRequestResponse({
     // Documentação da resposta pro swagger
-    description:
-      'Produto inexistente ou há algo errado na recuperação de dados desse produto',
+    description: 'Produto inválido',
     content: {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
-            message: 'Produto inexistente',
+            message: 'Produto inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Há algo errado na recuperação de dados desse produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message: 'Falha ao obter dados do produto',
           },
         },
       },
@@ -184,7 +190,6 @@ export class ProductsController {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
             message: 'Não foi possível alterar esse produto',
           },
         },

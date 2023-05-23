@@ -1,5 +1,5 @@
 <div align=center>
-  <img src="./imagens/INFVertical.jpg">
+  <img src="../imagens/INFVertical.jpg">
 </div>
 
 

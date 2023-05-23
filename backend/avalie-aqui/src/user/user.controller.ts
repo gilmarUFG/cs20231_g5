@@ -5,11 +5,12 @@ import {
   ApiAcceptedResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
-  ApiHeader,
   ApiInternalServerErrorResponse,
+  ApiTags,
 } from '@nestjs/swagger';
-import { JwtUserAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtUserAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@ApiTags('Users')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
