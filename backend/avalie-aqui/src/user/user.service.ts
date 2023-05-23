@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
@@ -112,6 +112,15 @@ export class UserService {
   //Busca usuário pelo email
   async getByEmail(email: string) {
     return await this.prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+  }
+
+  //Busca admin pelo email
+  async getAdminByEmail(email: string) {
+    return await this.prisma.adminUser.findUnique({
       where: {
         email: email,
       },

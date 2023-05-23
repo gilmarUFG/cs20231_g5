@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProductDto, UpdateProductDto } from './dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { slugify } from 'src/util/functions';
+import { PrismaService } from '../prisma/prisma.service';
+import { slugify } from '../util/functions';
 
 @Injectable()
 export class ProductsService {
