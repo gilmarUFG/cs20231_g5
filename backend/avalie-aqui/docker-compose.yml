@@ -7,7 +7,7 @@ services:
       context: .
     env_file:
       - docker.env
-    entrypoint: ['./wait-for-postgres.sh', 'npm', 'run', 'start:prod']
+    entrypoint: ['./wait-for-postgres.sh', 'npm', 'run', 'start']
     ports:
       - 4000:4000
     networks:
