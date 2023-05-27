@@ -41,7 +41,7 @@ export class AuthService {
         email: email,
       },
     });
-    if (user && bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = {
         id: user.id,
         email: user.email,
@@ -63,7 +63,7 @@ export class AuthService {
         email: email,
       },
     });
-    if (admin && bcrypt.compare(password, admin.password)) {
+    if (admin && (await bcrypt.compare(password, admin.password))) {
       const payload: JwtPayload = {
         id: admin.id,
         email: admin.email,
