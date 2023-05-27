@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as api from '../../api/index.js';
 
 const schema = z.object({
   email: z.string().email('E-mail inválido').nonempty('Campo obrigatório'),
@@ -30,9 +31,12 @@ export default function Login() {
     mode: 'onBlur',
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data, event) => {
+    event.preventDefault();
     console.log(data);
+    await api.signIn({email: data.email, password: data.password});
   };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -76,7 +80,7 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                {...register('password')}
+                {...register("password")}
                 error={!!errors.password}
                 helperText={errors.password?.message}
               />
