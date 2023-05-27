@@ -32,10 +32,17 @@ export default function Login() {
   });
 
   const onSubmit = async (data, event) => {
-    event.preventDefault();
-    console.log(data);
-    await api.signIn({email: data.email, password: data.password});
-  };
+  event.preventDefault();
+  console.log(data);
+  
+  try {
+    const response = await api.signIn({ email: data.email, password: data.password });
+    console.log("Sucesso!", response);
+  } catch (error) {
+    console.error("Falha:", error.response.data);
+  }
+};
+
   
 
   return (
