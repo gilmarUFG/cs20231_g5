@@ -45,12 +45,59 @@ export class ProductsService {
     }
   }
 
-  findAll() {
-    return `This action returns all products`;
+  /**
+   * Obter todos os produtos cadastrados
+   * @returns array
+   */
+  async findAll() {
+    try {
+      return await this.prisma.product.findMany({
+        select: {
+          id: true,
+          name: true,
+          category: true,
+          image_url: true,
+        },
+        /* orderBy: {
+          id: 'desc',
+        }, */
+      });
+    } catch (error) {
+      throw new HttpException(
+        'Houve um erro na listagem de produtos. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
+  /**
+   * Obter um produto pelo id
+   * @param id integer
+   * @returns Product
+   */
   findOne(id: number) {
-    return `This action returns a #${id} product`;
+    try {
+      const product = this.prisma.product.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          name: true,
+          category: true,
+          image_url: true,
+        },
+      });
+      if (product) {
+        return product;
+      }
+      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao obter dados do produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
