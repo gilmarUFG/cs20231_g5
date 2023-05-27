@@ -1,8 +1,0 @@
-{
-  "recommendations": [
-    "esbenp.prettier-vscode",
-    "prisma.prisma",
-    "ms-vscode.vscode-typescript-next",
-    "donjayamanne.git-extension-pack"
-  ]
-}
