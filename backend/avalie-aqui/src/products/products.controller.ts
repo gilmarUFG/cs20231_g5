@@ -108,7 +108,8 @@ export class ProductsController {
       'application/json': {
         schema: {
           example: {
-            message: 'Houve um erro na listagem de produtos',
+            message:
+              'Houve um erro na listagem de produtos. Tente novamente mais tarde.',
           },
         },
       },
@@ -156,7 +157,8 @@ export class ProductsController {
       'application/json': {
         schema: {
           example: {
-            message: 'Falha ao obter dados do produto',
+            message:
+              'Falha ao obter dados do produto. Tente novamente mais tarde.',
           },
         },
       },
