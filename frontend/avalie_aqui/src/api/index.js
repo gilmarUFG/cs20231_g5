@@ -14,3 +14,5 @@ const API = axios.create({ baseURL: process.env.REACT_APP_PORT});
 
 export const signIn = (formData) => API.post('/auth/login', formData);
 export const signUp = (formData) => API.post('/user/register', formData);
+
+export const cadProd = (formData) => API.post('/products', formData);
