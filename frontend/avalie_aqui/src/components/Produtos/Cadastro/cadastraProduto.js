@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,6 +12,7 @@ import * as api from '../../../api/index';
 const schema = z.object({
   name: z.string().nonempty('Campo obrigatório'),
   category: z.string().nonempty('Campo obrigatório'),
+  image_url: z.string().nonempty('Campo obrigatório'),
 });
 
 const defaultTheme = createTheme();
@@ -27,12 +28,27 @@ export default function CadProd() {
     console.log(data);
   
     try {
+      
+      const token = localStorage.getItem('profile');
+      if (!token) {
+        console.log('É necessário estar autenticado e ser Administrador para Cadastrar um produto', token);
+        return;
+      }
+      console.log("Token acessado:  ",token.access_token);
       const response = await api.cadProd(data);
       console.log('Sucesso!', response);
     } catch (error) {
+      
       console.error('Falha:', error.response.data);
     }
   };
+
+  useEffect(() => {
+    const profile = JSON.parse(localStorage.getItem('profile'));
+    if (!profile || !profile.token) {
+      console.log('É necessário estar autenticado e ser Administrador para Cadastrar um produto');
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={defaultTheme}>

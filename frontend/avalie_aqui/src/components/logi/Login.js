@@ -17,6 +17,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as api from '../../api/index.js';
+import { useDispatch } from "react-redux";
+import { AUTH } from '../../constants/actionTypes.js';
 
 const schema = z.object({
   email: z.string().email('E-mail inválido').nonempty('Campo obrigatório'),
@@ -25,18 +27,22 @@ const schema = z.object({
 
 const defaultTheme = createTheme();
 
+
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onBlur',
   });
-
+  const dispatch = useDispatch();
   const onSubmit = async (data, event) => {
   event.preventDefault();
   console.log(data);
   
   try {
     const response = await api.signIn({ email: data.email, password: data.password });
+    const dados = response.data;
+    console.log("dados: ", dados);
+    dispatch({ type: AUTH, dados });
     console.log("Sucesso!", response);
   } catch (error) {
     console.error("Falha:", error.response.data);
