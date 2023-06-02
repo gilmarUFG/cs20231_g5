@@ -1,6 +1,17 @@
 # Avalie Aqui API
 
-Api para o sitema Avalie Aqui
+Api para o sitema Avalie Aqui.
+
+Para visualizar a documentação da API, acesse o [Swagger](#swagger).
+
+## Usuários padrão
+
+Esses usuários são criados automaticamente ao rodar os [seeders](#rodar-seeders):
+
+- Usuário: `usuario@avalieaqui.com`
+- Administrador: `admin@avalieaqui.com`
+
+Senha de ambos: `avalieaqui123`
 
 ## Informações/comandos para o desenvolvimento
 
