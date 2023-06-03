@@ -34,22 +34,39 @@ export default function Login() {
     mode: 'onBlur',
   });
   const dispatch = useDispatch();
-  const onSubmit = async (data, event) => {
+// ...
+
+const onSubmit = async (data, event) => {
   event.preventDefault();
   console.log(data);
   
   try {
-    const response = await api.signIn({ email: data.email, password: data.password });
-    const dados = response.data;
-    console.log("dados: ", dados);
-    dispatch({ type: AUTH, dados });
-    console.log("Sucesso!", response);
+    if (data.email === 'admin@avalieaqui.com') {
+      const response = await api.signInadm({ email: data.email, password: data.password });
+      if (response && response.data) {
+        const responseData = response.data;
+        console.log("responseData: ", responseData);
+        dispatch({ type: AUTH, data: responseData });
+        console.log("Sucesso ao logar como Administrador!", response);
+      } else {
+        console.error("Resposta inválida:", response);
+      }
+    } else {
+      const response = await api.signIn({ email: data.email, password: data.password }); // Corrigido: alterado para api.signIn
+      if (response && response.data) {
+        const responseData = response.data;
+        console.log("responseData: ", responseData);
+        dispatch({ type: AUTH, data: responseData });
+        console.log("Sucesso!", response);
+      } else {
+        console.error("Resposta inválida:", response);
+      }
+    }
   } catch (error) {
-    console.error("Falha:", error.response.data);
+    console.error("Falha:", error.response?.data);
   }
 };
 
-  
 
   return (
     <ThemeProvider theme={defaultTheme}>

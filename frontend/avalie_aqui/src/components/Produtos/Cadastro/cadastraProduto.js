@@ -29,12 +29,15 @@ export default function CadProd() {
   
     try {
       
-      const token = localStorage.getItem('profile');
+      const profile = JSON.parse(localStorage.getItem('profile'));
+      const token = profile?.access_token;
+
+
       if (!token) {
         console.log('É necessário estar autenticado e ser Administrador para Cadastrar um produto', token);
         return;
       }
-      console.log("Token acessado:  ",token.access_token);
+      console.log("Token acessado:  ",token);
       const response = await api.cadProd(data);
       console.log('Sucesso!', response);
     } catch (error) {
