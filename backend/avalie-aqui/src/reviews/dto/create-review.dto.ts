@@ -2,9 +2,8 @@ import { User } from "@prisma/client";
 import { Product } from "src/products/entities/product.entity";
 
 export class CreateReviewDto {
-    id: number;
-    reviewer: User;
-    ratedProduct: Product;
+    reviewerId: number;
+    ratedProductId: number;
     rating: number;
     comments: string;
 }

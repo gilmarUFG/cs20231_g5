@@ -25,15 +25,25 @@ export class ReviewsService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return 'This action adds a new review';
   }
 
   findAll() {
-    return `This action returns all reviews`;
+    return this.prisma.review.findMany();
   }
 
   findOne(id: number) {
-    return this.prisma.;
+    return this.prisma.review.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        reviewer: true,
+        ratedProduct: true,
+        rating: true,
+        comments: true
+      }
+    });
   }
 
   update(id: number, updateReviewDto: UpdateReviewDto) {
