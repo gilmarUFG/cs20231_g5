@@ -19,6 +19,7 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  reviews   Review[]
   
   @@map("users")
 }
@@ -41,6 +42,19 @@ model Product {
   image_url String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  reviews   Review[] 
   
   @@map("products")
+}
+
+model Review {
+    id              Int     @default(autoincrement()) @id
+    reviewerId      Int     
+    reviewer        User    @relation(fields: [reviewerId], references: [id])
+    ratedProductId  Int 
+    ratedProduct    Product @relation(fields: [ratedProductId], references: [id])
+    rating          Float
+    comments        String?
+
+    @@map("reviews")
 }
