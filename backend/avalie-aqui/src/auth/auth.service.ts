@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './auth.types';
+import { JwtAdminPayload, JwtUserPayload } from './auth.types';
 import { User, AdminUser } from '@prisma/client';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -15,6 +15,11 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
+  /**
+   * Valida o usuário
+   * @param email string
+   * @returns
+   */
   async validateUser(email: string): Promise<Omit<User, 'password'>> {
     const user = await this.userService.getByEmail(email);
     if (user) {
@@ -24,8 +29,13 @@ export class AuthService {
     return null;
   }
 
+  /**
+   * Valida o administrador
+   * @param email string
+   * @returns
+   */
   async validateAdmin(email: string): Promise<Omit<AdminUser, 'password'>> {
-    const admin = await this.userService.getByEmail(email);
+    const admin = await this.userService.getAdminByEmail(email);
     if (admin) {
       const { password, ...result } = admin;
       return result;
@@ -33,6 +43,11 @@ export class AuthService {
     return null;
   }
 
+  /**
+   * Realiza o login do usuário
+   * @param data LoginDto
+   * @returns access_token
+   */
   async login(data: LoginDto) {
     const { email, password } = data;
 
@@ -42,7 +57,7 @@ export class AuthService {
       },
     });
     if (user && (await bcrypt.compare(password, user.password))) {
-      const payload: JwtPayload = {
+      const payload: JwtUserPayload = {
         id: user.id,
         email: user.email,
         name: user.name,
@@ -55,6 +70,11 @@ export class AuthService {
     }
   }
 
+  /**
+   * Realiza o login do administrador
+   * @param data LoginDto
+   * @returns access_token
+   */
   async loginAdmin(data: LoginDto) {
     const { email, password } = data;
 
@@ -64,7 +84,7 @@ export class AuthService {
       },
     });
     if (admin && (await bcrypt.compare(password, admin.password))) {
-      const payload: JwtPayload = {
+      const payload: JwtAdminPayload = {
         id: admin.id,
         email: admin.email,
         name: admin.name,

@@ -9,16 +9,16 @@ import { slugify } from '../../src/util/functions';
  */
 export async function productSeeder(prisma: PrismaClient, qty = 10) {
   // Gerar um produto aleatório
-  const fakerProduct = async () => ({
+  const fakerProduct = () => ({
     name: faker.commerce.productName(),
     category: slugify(faker.commerce.department()),
     image_url: faker.image.url(),
   });
 
-  console.log('Executando seeders de produtos');
+  console.log('Executando seeder de produtos');
 
   // Cadastrar os produtos aleatórios
   for (let i = 0; i < qty; i++) {
-    await prisma.product.create({ data: await fakerProduct() });
+    await prisma.product.create({ data: fakerProduct() });
   }
 }

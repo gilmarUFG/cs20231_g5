@@ -1,4 +1,5 @@
 import { AUTH, LOGOUT } from '../constants/actionTypes';
+import { combineReducers } from 'redux';
 
 const authReducers = (state = { authData: null }, action) => {
     switch (action.type) {
@@ -13,4 +14,4 @@ const authReducers = (state = { authData: null }, action) => {
     }
 }
 
-export default authReducers;
+export const reducers = combineReducers({ authReducers });

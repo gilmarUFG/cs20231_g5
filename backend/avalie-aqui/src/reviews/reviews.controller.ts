@@ -11,7 +11,7 @@ import {
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiAcceptedResponse, ApiBearerAuth, ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 import { JwtUserAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Reviews')
@@ -20,6 +20,20 @@ export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @Post()
+  @ApiAcceptedResponse({
+    // Documentação da resposta pro swagger
+    description: 'Cadastro realizado com sucesso',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            id: 1,
+            message: 'Avaliação cadastrada com sucesso.',
+          },
+        },
+      },
+    },
+  })
   @UseGuards(JwtUserAuthGuard)
   @ApiBearerAuth('User access-token')
   create(@Body() createReviewDto: CreateReviewDto) {
@@ -32,7 +46,7 @@ export class ReviewsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  getReview(@Param('id') id: string) {
     return this.reviewsService.findOne(+id);
   }
 

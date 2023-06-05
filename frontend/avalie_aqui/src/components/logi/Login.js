@@ -17,6 +17,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as api from '../../api/index.js';
+import { useDispatch } from "react-redux";
+import { AUTH } from '../../constants/actionTypes.js';
 
 const schema = z.object({
   email: z.string().email('E-mail inválido').nonempty('Campo obrigatório'),
@@ -25,25 +27,46 @@ const schema = z.object({
 
 const defaultTheme = createTheme();
 
+
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onBlur',
   });
+  const dispatch = useDispatch();
+// ...
 
-  const onSubmit = async (data, event) => {
+const onSubmit = async (data, event) => {
   event.preventDefault();
   console.log(data);
   
   try {
-    const response = await api.signIn({ email: data.email, password: data.password });
-    console.log("Sucesso!", response);
+    if (data.email === 'admin@avalieaqui.com') {
+      const response = await api.signInadm({ email: data.email, password: data.password });
+      if (response && response.data) {
+        const responseData = response.data;
+        console.log("responseData: ", responseData);
+        dispatch({ type: AUTH, data: responseData });
+        console.log("Sucesso ao logar como Administrador!", response);
+      } else {
+        console.error("Resposta inválida:", response);
+      }
+    } else {
+      const response = await api.signIn({ email: data.email, password: data.password }); // Corrigido: alterado para api.signIn
+      if (response && response.data) {
+        const responseData = response.data;
+        console.log("responseData: ", responseData);
+        dispatch({ type: AUTH, data: responseData });
+        console.log("Sucesso!", response);
+      } else {
+        console.error("Resposta inválida:", response);
+      }
+    }
   } catch (error) {
-    console.error("Falha:", error.response.data);
+    console.error("Falha:", error.response?.data);
   }
 };
 
-  
 
   return (
     <ThemeProvider theme={defaultTheme}>
