@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { adminSeeder, productSeeder, userSeeder } from './seeders/index';
+import { reviewSeeder } from './seeders/review-seeder';
 
 const prisma = new PrismaClient();
 
@@ -16,9 +17,10 @@ async function main() {
   }
 
   // Executar os seeders
-  userSeeder(prisma, 10);
-  adminSeeder(prisma, 5);
-  productSeeder(prisma, 20);
+  await userSeeder(prisma, 10);
+  await adminSeeder(prisma, 5);
+  await productSeeder(prisma, 20);
+  await reviewSeeder(prisma, 50);
 
   console.log('Seeders finalizados');
 }

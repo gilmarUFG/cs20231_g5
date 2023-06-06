@@ -1,3 +1,4 @@
-import { User } from '@prisma/client';
+import { AdminUser, User } from '@prisma/client';
 
-export type JwtPayload = Pick<User, 'id' | 'name' | 'email'>;
+export type JwtUserPayload = Pick<User, 'id' | 'name' | 'email'>;
+export type JwtAdminPayload = Pick<AdminUser, 'id' | 'name' | 'email'>;
