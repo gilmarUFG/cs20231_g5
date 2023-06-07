@@ -9,34 +9,31 @@ import Typography from '@mui/material/Typography';
 
 
 const Produto = ({ produto }) => {
-  
-    const image_produto = produto.image_url;
-    console.log(image_produto);
+  //<CardMedia className={classes.media} image={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} title={post.title} />
+    
   return (
-    <Grid item key={produto} xs={12} sm={6} md={4}>
+    <Grid item key={produto} >
                 <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                  sx={{ height: '100%',width:'100%', display: 'flex', flexDirection: 'column' }}
                 >
-                  <CardMedia
+                 <CardMedia
                     component="div"
                     sx={{
                       // 16:9
-                      pt: '56.25%',
+                      pt: '90.25%',
                     }}
-                    image="https://source.unsplash.com/random?wallpapers"
+                    image = {produto.image_url || 'https://source.unsplash.com/random?wallpapers'}
                   />
-                  <CardContent sx={{ flexGrow: 1 }}>
+                  <CardContent sx={{ flexGrow: 2 }}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                    {produto.name}
                     </Typography>
                     <Typography>
-                      This is a media card. You can use this section to describe the
-                      content.
+                    {produto.category}
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">View</Button>
-                    <Button size="small">Edit</Button>
+                      <Button size="small">Avaliar</Button>
                   </CardActions>
                 </Card>
               </Grid>
@@ -44,3 +41,4 @@ const Produto = ({ produto }) => {
 };
 
 export default Produto;
+
