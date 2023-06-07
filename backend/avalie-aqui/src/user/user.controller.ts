@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto';
 import {
@@ -9,6 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtUserAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { User } from '@prisma/client';
 
 @ApiTags('Users')
 @Controller('user')
@@ -97,7 +106,7 @@ export class UserController {
       },
     },
   })
-  getUser(@Param('id') id: number) {
-    return this.userService.getUser(id);
+  getUser(@Param('id') id: number, @Request() req: any) {
+    return this.userService.getUser(id, req);
   }
 }

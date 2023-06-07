@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -63,9 +64,9 @@ export class UserService {
    * @param id number
    * @returns object
    */
-  getUser(id: number) {
-    // TODO: Verificar se o usuário é o mesmo que está logado (obter o usuário logado do guard e comparar com o id)
-    if (true) {
+  getUser(id: number, req: any) {
+    let user: User = req.user;
+    if (id == user.id) {
       return this.prisma.user.findUnique({
         where: {
           id: id,
