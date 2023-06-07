@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -42,6 +40,10 @@ export default function SignUp() {
     } catch (error) {
       console.error("Falha:", error.response.data);
     }
+  };
+
+  const handleLoginLinkClick = () => {
+    history.push('/login'); // Redireciona para a página de login
   };
 
   return (
@@ -83,7 +85,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="cpf"
-                  label="cpf"
+                  label="CPF do Usuário"
                   name="cpf"
                   autoComplete="family-name"
                   {...register('cpf')}
@@ -96,7 +98,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Endereço de Email"
                   name="email"
                   autoComplete="email"
                   {...register('email')}
@@ -109,7 +111,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Senha"
                   type="password"
                   id="password"
                   autoComplete="new-password"
@@ -118,13 +120,7 @@ export default function SignUp() {
                   helperText={errors.password?.message}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
-            </Grid>
+           </Grid>
             <Button
               type="submit"
               fullWidth
@@ -135,9 +131,9 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+              <Link href="#" variant="body2" onClick={handleLoginLinkClick}>
+                 Já Possui uma conta? Entrar na Conta
+              </Link>
               </Grid>
             </Grid>
           </Box>
