@@ -27,30 +27,28 @@ function Copyright() {
   );
 }
 
-
-
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
+
 export default function Album() {
-    const [cards, setCards] = React.useState([]);
-  
-    React.useEffect(() => {
-      const fetchProdutos = async () => {
-        try {
-          const produtos = await api.getProdutos();
-          console.log(produtos);
-          setCards(produtos.data);
-        } catch (error) {
-          console.error('Erro ao buscar produtos:', error);
-        }
-      };
-  
-      fetchProdutos();
-    }, []);
-  
-    if (cards === undefined) {
-      return <div>Carregando...</div>;
-    }//retorna um vetor de objetos json
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchProdutos = async () => {
+      try {
+        const produtos = await api.getProdutos();
+        console.log(produtos);
+        setCards(produtos.data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+
+    fetchProdutos();
+  }, []);
+
+  if (cards === undefined) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -64,7 +62,6 @@ export default function Album() {
         </Toolbar>
       </AppBar>
       <main>
-        {/* Hero unit */}
         <Box
           sx={{
             bgcolor: 'background.paper',
@@ -98,23 +95,17 @@ export default function Album() {
             </Stack>
           </Container>
         </Box>
-        <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid container spacing={4}>
-              {cards.map((card) => (
-                <Grid item key={card.id} xs={12} sm={6} md={4}>
-                  <Produto card={card} />
-                </Grid>
-              ))}
-            </Grid>
-            
-            ))}
-          </Grid>
-        </Container>
+        <Container sx={{ py: 10 }} maxWidth="120%">
+  <Grid container spacing={4}>
+    {cards.map((card, index) => (
+      <Grid item key={index} xs={12} sm={8} md={4}>
+        <Produto produto={card} />
+      </Grid>
+    ))}
+  </Grid>
+</Container>
+
       </main>
-      {/* Footer */}
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
           Footer
@@ -129,7 +120,6 @@ export default function Album() {
         </Typography>
         <Copyright />
       </Box>
-      {/* End footer */}
     </ThemeProvider>
   );
 }
