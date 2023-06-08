@@ -19,8 +19,20 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  reviews   Review[]
   
   @@map("users")
+}
+
+model AdminUser {
+  id        Int      @default(autoincrement()) @id
+  email     String   @unique
+  name      String  
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  
+  @@map("admin_users")
 }
 
 model Product {
@@ -30,6 +42,21 @@ model Product {
   image_url String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  reviews   Review[] 
   
   @@map("products")
+}
+
+model Review {
+  id              Int      @default(autoincrement()) @id
+  reviewerId      Int     
+  reviewer        User     @relation(fields: [reviewerId], references: [id])
+  ratedProductId  Int 
+  ratedProduct    Product  @relation(fields: [ratedProductId], references: [id])
+  rating          Float
+  comments        String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  @@map("reviews")
 }

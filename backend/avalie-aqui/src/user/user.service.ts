@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { RegisterUserDto } from './dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { RegisterUserDto } from './dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -40,7 +41,7 @@ export class UserService {
 
     try {
       // Cadastrar o usuário
-      let user = await this.prisma.user.create({
+      const user = await this.prisma.user.create({
         data: registerUserDto,
         select: {
           id: true,
@@ -53,6 +54,74 @@ export class UserService {
     } catch (error) {
       throw new HttpException(
         'Falha ao cadastrar usuário. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  /**
+   * Obter os dados de um usuário pelo ID
+   * @param id number
+   * @returns object
+   */
+  getUser(id: number, req: any) {
+    let user: User = req.user;
+    if (id == user.id) {
+      return this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          cpf: true,
+        },
+      });
+    } else {
+      throw new HttpException(
+        'Só é possível visualizar os seus próprios dados.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  /**
+   * Obter as avaliações de um usuário
+   * @param id integer
+   * @returns Product
+   */
+  getReviews(id: number) {
+    try {
+      const productReviews = this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          reviews: {
+            select: {
+              id: true,
+              ratedProduct: {
+                select: {
+                  id: true,
+                  name: true,
+                  category: true,
+                  image_url: true,
+                },
+              },
+              rating: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      if (productReviews) {
+        return productReviews;
+      }
+      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao obter as avaliações do produto. Tente novamente mais tarde.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -80,5 +149,23 @@ export class UserService {
     });
 
     return !!user;
+  }
+
+  //Busca usuário pelo email
+  async getByEmail(email: string) {
+    return await this.prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+  }
+
+  //Busca admin pelo email
+  async getAdminByEmail(email: string) {
+    return await this.prisma.adminUser.findUnique({
+      where: {
+        email: email,
+      },
+    });
   }
 }

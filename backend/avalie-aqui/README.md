@@ -1,6 +1,17 @@
 # Avalie Aqui API
 
-Api para o sitema Avalie Aqui
+Api para o sitema Avalie Aqui.
+
+Para visualizar a documentação da API, acesse o [Swagger](#swagger).
+
+## Usuários padrão
+
+Esses usuários são criados automaticamente ao rodar os [seeders](#rodar-seeders):
+
+- Usuário: `usuario@avalieaqui.com`
+- Administrador: `admin@avalieaqui.com`
+
+Senha de ambos: `avalieaqui123`
 
 ## Informações/comandos para o desenvolvimento
 
@@ -49,6 +60,14 @@ npx prisma migrate dev
 - Será necessário rodar as migrations sempre que houver alterações `schema.prisma`
 - Este comando já ira gerar o Prisma Client com as alterações
   - Para gerar o Prisma Client manualmente, execute `npx prisma generate`
+
+#### Rodar seeders
+
+```
+npm run seed
+```
+
+- Este comando irá popular o banco de dados com dados aleatórios
 
 #### Iniciar servidor de desenvolvimento
 

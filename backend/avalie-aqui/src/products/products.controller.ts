@@ -6,21 +6,29 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import {
   ApiAcceptedResponse,
+  ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { CreateProductDto, UpdateProductDto } from './dto';
+import { JwtAdminAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   // Cadastra um novo produto
   @Post()
+  @UseGuards(JwtAdminAuthGuard)
+  @ApiBearerAuth('Admin access-token')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
     description: 'Produto cadastrado com Sucesso',
@@ -29,7 +37,6 @@ export class ProductsController {
         schema: {
           example: {
             id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
             message: 'Produto cadastrado com sucesso.',
           },
         },
@@ -43,7 +50,6 @@ export class ProductsController {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
             message: 'Já existe um produto com esse nome cadastrado',
           },
         },
@@ -57,7 +63,6 @@ export class ProductsController {
       'application/json': {
         schema: {
           example: {
-            statusCode: 500,
             message:
               'Não foi possível cadastrar o produto. Tente novamente mais tarde.',
           },
@@ -76,24 +81,35 @@ export class ProductsController {
     content: {
       'application/json': {
         schema: {
-          example: {
-            id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
-            message: 'listagem de produtos concluída com sucesso.',
-          },
+          example: [
+            {
+              id: 1,
+              name: 'RTX 4060 Ti',
+              category: 'placa-de-video',
+              image_url:
+                'https://files.tecnoblog.net/wp-content/uploads/2023/05/geforce-rtx-4060-ti-back-1060x795.jpg',
+            },
+            {
+              id: 2,
+              name: 'Elden Ring Official Strategy Guide',
+              category: 'livro',
+              image_url:
+                'https://m.media-amazon.com/images/I/41N2TM5JAaL._SY498_BO1,204,203,200_.jpg',
+            },
+          ],
         },
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiInternalServerErrorResponse({
     // Documentação da resposta pro swagger
-    description: 'Houve um erro na litagem de produtos',
+    description: 'Houve um erro na listagem de produtos',
     content: {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
-            message: 'Houve um erro na listagem de produtos',
+            message:
+              'Houve um erro na listagem de produtos. Tente novamente mais tarde.',
           },
         },
       },
@@ -112,23 +128,37 @@ export class ProductsController {
         schema: {
           example: {
             id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
-            message: 'Produto encontrado com sucesso.',
+            name: 'RTX 4060 Ti',
+            category: 'placa-de-video',
+            image_url:
+              'https://files.tecnoblog.net/wp-content/uploads/2023/05/geforce-rtx-4060-ti-back-1060x795.jpg',
           },
         },
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiBadRequestResponse({
     // Documentação da resposta pro swagger
-    description:
-      'Produto inexistente ou há algo errado na recuperação de dados desse produto',
+    description: 'Produto inválido',
     content: {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
-            message: 'Produto inexistente',
+            message: 'Produto inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Há algo errado na recuperação de dados desse produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message:
+              'Falha ao obter dados do produto. Tente novamente mais tarde.',
           },
         },
       },
@@ -138,32 +168,109 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
-  @Put(':id')
+  @Get(':id/reviews')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
-    description: 'Produto alterado com Sucesso',
+    description: 'Avaliações do produto encontradas com sucesso',
     content: {
       'application/json': {
         schema: {
           example: {
-            id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
+            reviews: [
+              {
+                id: 24,
+                reviewer: {
+                  id: 4,
+                  name: 'SaraBraga',
+                },
+                rating: 2,
+                comments: null,
+              },
+              {
+                id: 40,
+                reviewer: {
+                  id: 3,
+                  name: 'EmanuelBraga',
+                },
+                rating: 1.5,
+                comments:
+                  'Veritatis nostrum aspernatur tempore commodi nulla. Maiores quia suscipit est aliquam esse dolore necessitatibus. Excepturi maiores repellat nostrum magni quidem.',
+              },
+            ],
+          },
+        },
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    // Documentação da resposta pro swagger
+    description: 'Produto inválido',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message: 'Produto inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Há algo errado na recuperação das avaliações desse produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message:
+              'Falha ao obter avaliações do produto. Tente novamente mais tarde.',
+          },
+        },
+      },
+    },
+  })
+  getReviews(@Param('id') id: string) {
+    return this.productsService.getReviews(+id);
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAdminAuthGuard)
+  @ApiBearerAuth('Admin access-token')
+  @ApiAcceptedResponse({
+    // Documentação da resposta pro swagger
+    description: 'Produto alterado com sucesso',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
             message: 'Produto alterado com sucesso.',
           },
         },
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiBadRequestResponse({
     // Documentação da resposta pro swagger
-    description:
-      'Não foi possível alterar este produto, verifique suas permissões e/ou as caractetísticas do produto',
+    description: 'Produto Inválido',
     content: {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
-            message: 'Não foi possível alterar esse produto',
+            message: 'Produto Inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Não foi possível alterar este produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message:
+              'Não foi possível alterar esse produto. Tente novamente mais tarde.',
           },
         },
       },
@@ -174,30 +281,43 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAdminAuthGuard)
+  @ApiBearerAuth('Admin access-token')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
-    description: 'Produto excluido com Sucesso',
+    description: 'Produto excluido com sucesso',
     content: {
       'application/json': {
         schema: {
           example: {
-            id: 1,
-            createdAt: '2021-08-31T00:00:00.000Z',
             message: 'Produto excluído com sucesso.',
           },
         },
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiBadRequestResponse({
     // Documentação da resposta pro swagger
-    description: 'Produto Inexistente',
+    description: 'Produto Inválido',
     content: {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
-            message: 'Produto Inexistente',
+            message: 'Produto Inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Não foi possível remover este produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message:
+              'Não foi possível remover esse produto. Tente novamente mais tarde.',
           },
         },
       },
