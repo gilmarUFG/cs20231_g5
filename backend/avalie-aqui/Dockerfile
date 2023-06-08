@@ -15,5 +15,5 @@ RUN npx prisma generate
 RUN npm run build
 
 RUN [ ! -e .env ] || rm .env
-RUN cp docker.env .env
 
+RUN cp docker.env .env

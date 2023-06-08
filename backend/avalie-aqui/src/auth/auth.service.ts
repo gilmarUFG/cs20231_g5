@@ -62,7 +62,15 @@ export class AuthService {
         email: user.email,
         name: user.name,
       };
-      return { access_token: this.jwtService.sign(payload) };
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          cpf: user.cpf,
+        },
+      };
     } else {
       throw new UnauthorizedException(
         'Verifique as credenciais e tente novamente',
@@ -89,7 +97,14 @@ export class AuthService {
         email: admin.email,
         name: admin.name,
       };
-      return { access_token: this.jwtService.sign(payload) };
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          id: admin.id,
+          name: admin.name,
+          email: admin.email,
+        },
+      };
     } else {
       throw new UnauthorizedException(
         'Verifique as credenciais e tente novamente',

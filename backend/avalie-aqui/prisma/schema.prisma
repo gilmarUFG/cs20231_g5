@@ -48,13 +48,15 @@ model Product {
 }
 
 model Review {
-  id              Int     @default(autoincrement()) @id
+  id              Int      @default(autoincrement()) @id
   reviewerId      Int     
-  reviewer        User    @relation(fields: [reviewerId], references: [id])
+  reviewer        User     @relation(fields: [reviewerId], references: [id])
   ratedProductId  Int 
-  ratedProduct    Product @relation(fields: [ratedProductId], references: [id])
+  ratedProduct    Product  @relation(fields: [ratedProductId], references: [id])
   rating          Float
-  comments        String? @db.Text
+  comments        String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
 
   @@map("reviews")
 }

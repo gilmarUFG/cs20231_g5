@@ -12,7 +12,14 @@ describe('ProductsService', () => {
     service = module.get<ProductsService>(ProductsService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('createProduct', () => {
+    it('should create a product', async () => {
+      let payload = {
+        name: 'RTX 4060 Ti',
+        category: 'placa-de-video',
+        image_url:
+          'https://files.tecnoblog.net/wp-content/uploads/2023/05/geforce-rtx-4060-ti-back-1060x795.jpg',
+      };
+    });
   });
 });

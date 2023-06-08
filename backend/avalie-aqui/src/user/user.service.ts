@@ -64,24 +64,58 @@ export class UserService {
    * @param id number
    * @returns object
    */
-  getUser(id: number, req: any) {
+  getUser(req: any) {
     let user: User = req.user;
-    if (id == user.id) {
-      return this.prisma.user.findUnique({
+    return this.prisma.user.findUnique({
+      where: {
+        id: user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        cpf: true,
+      },
+    });
+  }
+
+  /**
+   * Obter as avaliações de um usuário
+   * @param id integer
+   * @returns Product
+   */
+  getReviews(id: number) {
+    try {
+      const productReviews = this.prisma.user.findUnique({
         where: {
           id: id,
         },
         select: {
-          id: true,
-          name: true,
-          email: true,
-          cpf: true,
+          reviews: {
+            select: {
+              id: true,
+              ratedProduct: {
+                select: {
+                  id: true,
+                  name: true,
+                  category: true,
+                  image_url: true,
+                },
+              },
+              rating: true,
+              comments: true,
+            },
+          },
         },
       });
-    } else {
+      if (productReviews) {
+        return productReviews;
+      }
+      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
+    } catch (error) {
       throw new HttpException(
-        'Só é possível visualizar os seus próprios dados.',
-        HttpStatus.FORBIDDEN,
+        'Falha ao obter as avaliações do produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

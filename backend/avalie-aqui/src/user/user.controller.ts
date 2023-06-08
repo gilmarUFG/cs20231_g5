@@ -11,6 +11,7 @@ import { UserService } from './user.service';
 import { RegisterUserDto } from './dto';
 import {
   ApiAcceptedResponse,
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
@@ -73,7 +74,7 @@ export class UserController {
     return this.userService.register(registerUserDto);
   }
 
-  @Get(':id')
+  @Get('')
   @UseGuards(JwtUserAuthGuard)
   @ApiBearerAuth('User access-token')
   @ApiAcceptedResponse({
@@ -92,21 +93,76 @@ export class UserController {
       },
     },
   })
-  @ApiForbiddenResponse({
+  getUser(@Request() req: any) {
+    return this.userService.getUser(req);
+  }
+
+  @Get(':id/reviews')
+  @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
-    description: 'Caso tente visualizar os dados de outro usuário',
+    description: 'Avaliações do usuário obtidas com sucesso',
     content: {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
-            message: 'Só é possível visualizar os seus próprios dados.',
+            reviews: [
+              {
+                id: 15,
+                ratedProduct: {
+                  id: 17,
+                  name: 'Impressionante Algodão Frango',
+                  category: 'saude',
+                  image_url: 'https://picsum.photos/seed/y7IMpRWhze/640/480',
+                },
+                rating: 2,
+                comments:
+                  'Facilis maxime quisquam eaque assumenda. Veritatis debitis vero asperiores animi vitae temporibus cumque. Expedita quod labore fuga.',
+              },
+              {
+                id: 19,
+                ratedProduct: {
+                  id: 8,
+                  name: 'Inteligente Granito Computador',
+                  category: 'filmes',
+                  image_url: 'https://picsum.photos/seed/kiR8nJ/640/480',
+                },
+                rating: 3.5,
+                comments: null,
+              },
+            ],
           },
         },
       },
     },
   })
-  getUser(@Param('id') id: number, @Request() req: any) {
-    return this.userService.getUser(id, req);
+  @ApiBadRequestResponse({
+    // Documentação da resposta pro swagger
+    description: 'Usuário inválido',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message: 'Usuário inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Há algo errado na recuperação das avaliações desse usuário',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message:
+              'Falha ao obter avaliações do usuário. Tente novamente mais tarde.',
+          },
+        },
+      },
+    },
+  })
+  getReviews(@Param('id') id: string) {
+    return this.userService.getReviews(+id);
   }
 }
