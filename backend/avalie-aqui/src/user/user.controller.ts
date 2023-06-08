@@ -74,7 +74,7 @@ export class UserController {
     return this.userService.register(registerUserDto);
   }
 
-  @Get(':id')
+  @Get('')
   @UseGuards(JwtUserAuthGuard)
   @ApiBearerAuth('User access-token')
   @ApiAcceptedResponse({
@@ -93,22 +93,8 @@ export class UserController {
       },
     },
   })
-  @ApiForbiddenResponse({
-    // Documentação da resposta pro swagger
-    description: 'Caso tente visualizar os dados de outro usuário',
-    content: {
-      'application/json': {
-        schema: {
-          example: {
-            statusCode: 403,
-            message: 'Só é possível visualizar os seus próprios dados.',
-          },
-        },
-      },
-    },
-  })
-  getUser(@Param('id') id: number, @Request() req: any) {
-    return this.userService.getUser(id, req);
+  getUser(@Request() req: any) {
+    return this.userService.getUser(req);
   }
 
   @Get(':id/reviews')
