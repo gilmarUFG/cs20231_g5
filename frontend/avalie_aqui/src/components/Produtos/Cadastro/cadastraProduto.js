@@ -48,7 +48,7 @@ export default function CadProd() {
 
   useEffect(() => {
     const profile = JSON.parse(localStorage.getItem('profile'));
-    if (!profile || !profile.token) {
+    if (!profile) {
       console.log('É necessário estar autenticado e ser Administrador para Cadastrar um produto');
     }
   }, []);
