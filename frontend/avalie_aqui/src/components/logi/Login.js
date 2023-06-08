@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -65,9 +66,11 @@ const onSubmit = async (data, event) => {
   }
 };
 
-const handleSignupLinkClick = () => {
-  history.push('/signup'); // Redireciona para a página de login
-};
+const navigate = useNavigate();
+
+  const handleSignupLinkClick = () => {
+    navigate('/signup');
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>

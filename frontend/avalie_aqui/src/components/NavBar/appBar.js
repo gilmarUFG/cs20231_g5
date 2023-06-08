@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { AppBar, Avatar, Button, Toolbar, Typography } from '@mui/material';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
 import memories from '../../images/avalie.png';
 
 export default function Navbar() {
-  const classes = useStyles();
+
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
-    history.push('/');
+    navigate('/');
     setUser(null);
   };
 
@@ -31,22 +31,22 @@ export default function Navbar() {
   }, [location]);
 
   return (
-    <AppBar className={classes.appBar} position="static" color="inherit">
-      <div className={classes.brandContainer}>
+    <AppBar  position="static" color="inherit">
+      <div >
         <Typography
-          className={classes.heading}
+         
           variant="h2"
           align="center"
         >
           Avalie Aqui!
         </Typography>
-        <img className={classes.image} src={memories} alt="icon" height="60" />
+        <img  src={memories} alt="icon" height="60" />
       </div>
-      <Toolbar className={classes.toolbar}>
+      <Toolbar >
         <Button
           component={Link}
           to="/"
-          className={classes.link}
+          
           color={location.pathname === '/' ? 'primary' : 'inherit'}
         >
           Home
@@ -55,7 +55,7 @@ export default function Navbar() {
         <Button
           component={Link}
           to="/cadprod"
-          className={classes.link}
+          
           color={
             location.pathname === '/cadastro-produtos' ? 'primary' : 'inherit'
           }
@@ -63,20 +63,11 @@ export default function Navbar() {
           Cadastro de Produtos
         </Button>
         {user ? (
-          <div className={classes.profile}>
-            <Avatar
-              className={classes.purple}
-              alt={user.result.name}
-              
-            >
-              {user.result.name.charAt(0)}
-            </Avatar>
-            <Typography className={classes.userName} variant="h6">
-              {user.result.name}
-            </Typography>
+          <div >
+            
             <Button
               variant="contained"
-              className={classes.logout}
+              className={logout}
               color="secondary"
               onClick={logout}
             >
@@ -84,10 +75,10 @@ export default function Navbar() {
             </Button>
           </div>
         ) : (
-            <Button
+          <Button
             component={Link}
             to="/login"
-            className={classes.link}
+            
             color={location.pathname === '/login' ? 'primary' : 'inherit'}
           >
             Login
@@ -97,3 +88,18 @@ export default function Navbar() {
     </AppBar>
   );
 }
+
+
+/*
+<Avatar
+              
+              alt={user.result.name}
+              
+            >
+              {user.result.name.charAt(0)}
+            </Avatar>
+            <Typography  variant="h6">
+              {user.name}
+            </Typography>
+
+            */
