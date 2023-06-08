@@ -86,6 +86,47 @@ export class UserService {
     }
   }
 
+  /**
+   * Obter as avaliações de um usuário
+   * @param id integer
+   * @returns Product
+   */
+  getReviews(id: number) {
+    try {
+      const productReviews = this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          reviews: {
+            select: {
+              id: true,
+              ratedProduct: {
+                select: {
+                  id: true,
+                  name: true,
+                  category: true,
+                  image_url: true,
+                },
+              },
+              rating: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      if (productReviews) {
+        return productReviews;
+      }
+      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao obter as avaliações do produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   // --------------------------------------------------
 
   // Verifica se o email já existe

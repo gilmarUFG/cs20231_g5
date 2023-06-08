@@ -168,12 +168,77 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
+  @Get(':id/reviews')
+  @ApiAcceptedResponse({
+    // Documentação da resposta pro swagger
+    description: 'Avaliações do produto encontradas com sucesso',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            reviews: [
+              {
+                id: 24,
+                reviewer: {
+                  id: 4,
+                  name: 'SaraBraga',
+                },
+                rating: 2,
+                comments: null,
+              },
+              {
+                id: 40,
+                reviewer: {
+                  id: 3,
+                  name: 'EmanuelBraga',
+                },
+                rating: 1.5,
+                comments:
+                  'Veritatis nostrum aspernatur tempore commodi nulla. Maiores quia suscipit est aliquam esse dolore necessitatibus. Excepturi maiores repellat nostrum magni quidem.',
+              },
+            ],
+          },
+        },
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    // Documentação da resposta pro swagger
+    description: 'Produto inválido',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message: 'Produto inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Há algo errado na recuperação das avaliações desse produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message:
+              'Falha ao obter avaliações do produto. Tente novamente mais tarde.',
+          },
+        },
+      },
+    },
+  })
+  getReviews(@Param('id') id: string) {
+    return this.productsService.getReviews(+id);
+  }
+
   @Put(':id')
   @UseGuards(JwtAdminAuthGuard)
   @ApiBearerAuth('Admin access-token')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
-    description: 'Produto alterado com Sucesso',
+    description: 'Produto alterado com sucesso',
     content: {
       'application/json': {
         schema: {
@@ -184,15 +249,28 @@ export class ProductsController {
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiBadRequestResponse({
     // Documentação da resposta pro swagger
-    description:
-      'Não foi possível alterar este produto, verifique suas permissões e/ou as caractetísticas do produto',
+    description: 'Produto Inválido',
     content: {
       'application/json': {
         schema: {
           example: {
-            message: 'Não foi possível alterar esse produto',
+            message: 'Produto Inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Não foi possível alterar este produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message:
+              'Não foi possível alterar esse produto. Tente novamente mais tarde.',
           },
         },
       },
@@ -207,27 +285,39 @@ export class ProductsController {
   @ApiBearerAuth('Admin access-token')
   @ApiAcceptedResponse({
     // Documentação da resposta pro swagger
-    description: 'Produto excluido com Sucesso',
+    description: 'Produto excluido com sucesso',
     content: {
       'application/json': {
         schema: {
           example: {
-            id: 1,
             message: 'Produto excluído com sucesso.',
           },
         },
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiBadRequestResponse({
     // Documentação da resposta pro swagger
-    description: 'Produto Inexistente',
+    description: 'Produto Inválido',
     content: {
       'application/json': {
         schema: {
           example: {
-            statusCode: 403,
-            message: 'Produto Inexistente',
+            message: 'Produto Inválido',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Não foi possível remover este produto',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message:
+              'Não foi possível remover esse produto. Tente novamente mais tarde.',
           },
         },
       },
