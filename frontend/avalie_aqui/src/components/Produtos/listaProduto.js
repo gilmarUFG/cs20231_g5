@@ -97,8 +97,8 @@ export default function Album() {
         </Box>
         <Container sx={{ py: 10 }} maxWidth="120%">
   <Grid container spacing={4}>
-    {cards.map((card, index) => (
-      <Grid item key={index} xs={12} sm={8} md={4}>
+    {cards.map((card) => (
+      <Grid item key={card} xs={12} sm={8} md={4}>
         <Produto produto={card} />
       </Grid>
     ))}
