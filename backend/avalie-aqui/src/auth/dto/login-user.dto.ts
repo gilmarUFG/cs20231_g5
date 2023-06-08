@@ -15,7 +15,7 @@ export class LoginDto {
   @ApiProperty({
     description: 'Email do Usuário',
     type: 'string',
-    example: 'joaodasilva@gmail.com',
+    example: 'usuario@avalieaqui.com',
     format: 'email',
     maxLength: 150,
     required: true,
@@ -29,7 +29,7 @@ export class LoginDto {
   @ApiProperty({
     description: 'Senha do Usuário',
     type: 'string',
-    example: 'senha123',
+    example: 'avalieaqui123',
     minLength: 6,
     maxLength: 150,
     required: true,
