@@ -71,6 +71,45 @@ export class ProductsService {
   }
 
   /**
+   * Obter as avaliações de um produto
+   * @param id integer
+   * @returns Product
+   */
+  getReviews(id: number) {
+    try {
+      const productReviews = this.prisma.product.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          reviews: {
+            select: {
+              id: true,
+              reviewer: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+              rating: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      if (productReviews) {
+        return productReviews;
+      }
+      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao obter as avaliações do produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  /**
    * Obter um produto pelo id
    * @param id integer
    * @returns Product
