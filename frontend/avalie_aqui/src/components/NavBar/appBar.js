@@ -24,23 +24,22 @@ export default function Navbar() {
       const decodeToken = decode(token);
 
       if (decodeToken.exp * 1000 < new Date().getTime()) logout();
+      const teste = decode(token);
+      console.log(teste);
+      setUser(teste);
     }
-
-    
-
-    setUser(JSON.parse(localStorage.getItem('profile')));
   }, [location]);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: '#006064' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <div sx={{ display: 'flex', alignItems: 'center' }}>
-          <img src={memories} alt="icon" height="60" sx={{ marginRight: '10px' }} />
+          <img src={memories} alt="icon" height="60" sx={{ marginRight: '5px' }} />
           <Typography variant="h5" sx={{ color: 'white' }}>
             Avalie Aqui!
           </Typography>
         </div>
-        <div>
+        <div sx={{ display: 'flex', alignItems: 'center' }}>
           <Button
             component={Link}
             to="/"
@@ -55,39 +54,37 @@ export default function Navbar() {
           >
             Cadastro de Produtos
           </Button>
-          {user ? (
-            <div sx={{ display: 'flex', alignItems: 'center' }}>
-               <Avatar
-                sx={{ bgcolor: '#FF4081', marginRight: '10px' }}
-                alt={user.result.user.name}
-              >
-                {user.result.user.name.charAt(0)}
-              </Avatar>
+        </div>
+        {user ? (
+          <div sx={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar sx={{ bgcolor: '#FF4081', marginRight: '10px' }}>
+              {user.name.charAt(0)}
+            </Avatar>
+            <div sx = {5}>
               <Typography variant="h6" sx={{ color: 'white' }}>
-                {user.result.user.name}
+                {user.name}
               </Typography>
-             
-              <Button
+              
+            </div>
+            <Button
                 variant="contained"
-                sx={{ marginLeft: '10px' }}
+                sx={{ marginLeft: '10px', height: '32px', fontSize: '12px' }}
                 color="secondary"
                 onClick={logout}
               >
                 Sair
               </Button>
-            </div>
-          ) : (
-            <Button
-              component={Link}
-              to="/login"
-              sx={{ color: location.pathname === '/login' ? 'white' : '#B2EBF2' }}
-            >
-              Login
-            </Button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <Button
+            component={Link}
+            to="/login"
+            sx={{ color: location.pathname === '/login' ? 'white' : '#B2EBF2' }}
+          >
+            Login
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );
 }
-/**/
