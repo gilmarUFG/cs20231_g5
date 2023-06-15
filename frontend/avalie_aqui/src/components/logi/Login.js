@@ -1,10 +1,9 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -43,7 +42,7 @@ const onSubmit = async (data, event) => {
   try {
     if (data.email === 'admin@avalieaqui.com') {
       const response = await api.signInadm({ email: data.email, password: data.password });
-      if (response && response.data) {
+      if (response.data) {
         const responseData = response.data;
         console.log("responseData: ", responseData);
         dispatch({ type: AUTH, data: responseData });
@@ -53,7 +52,7 @@ const onSubmit = async (data, event) => {
       }
     } else {
       const response = await api.signIn({ email: data.email, password: data.password }); // Corrigido: alterado para api.signIn
-      if (response && response.data) {
+      if (response.data) {
         const responseData = response.data;
         console.log("responseData: ", responseData);
         dispatch({ type: AUTH, data: responseData });
@@ -67,6 +66,11 @@ const onSubmit = async (data, event) => {
   }
 };
 
+const navigate = useNavigate();
+
+  const handleSignupLinkClick = () => {
+    navigate('/signup');
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -84,7 +88,7 @@ const onSubmit = async (data, event) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Minha Conta
           </Typography>
           <Paper elevation={3} sx={{ mt: 3, p: 4 }}>
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -93,7 +97,7 @@ const onSubmit = async (data, event) => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Endereço de Email"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -106,7 +110,7 @@ const onSubmit = async (data, event) => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Senha"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -114,28 +118,25 @@ const onSubmit = async (data, event) => {
                 error={!!errors.password}
                 helperText={errors.password?.message}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+             
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3 }}
               >
-                Sign In
+                Entrar
               </Button>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
-                    Forgot password?
+                    Esqueceu sua senha?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                 <Link href="#" variant="body2" onClick={handleSignupLinkClick}>
+                 Não Possui uma conta? Cadastre-se!
+                </Link>
                 </Grid>
               </Grid>
             </Box>

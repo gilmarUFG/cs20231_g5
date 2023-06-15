@@ -64,26 +64,19 @@ export class UserService {
    * @param id number
    * @returns object
    */
-  getUser(id: number, req: any) {
+  getUser(req: any) {
     let user: User = req.user;
-    if (id == user.id) {
-      return this.prisma.user.findUnique({
-        where: {
-          id: id,
-        },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          cpf: true,
-        },
-      });
-    } else {
-      throw new HttpException(
-        'Só é possível visualizar os seus próprios dados.',
-        HttpStatus.FORBIDDEN,
-      );
-    }
+    return this.prisma.user.findUnique({
+      where: {
+        id: user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        cpf: true,
+      },
+    });
   }
 
   /**
