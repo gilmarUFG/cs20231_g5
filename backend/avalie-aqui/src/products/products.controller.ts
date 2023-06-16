@@ -132,6 +132,8 @@ export class ProductsController {
             category: 'placa-de-video',
             image_url:
               'https://files.tecnoblog.net/wp-content/uploads/2023/05/geforce-rtx-4060-ti-back-1060x795.jpg',
+            average_rating: 2.125,
+            count_ratings: 4,
           },
         },
       },
