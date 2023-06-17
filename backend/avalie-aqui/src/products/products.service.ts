@@ -27,7 +27,7 @@ export class ProductsService {
 
     try {
       // Cadastrar o usuário
-      let product = await this.prisma.product.create({
+      const product = await this.prisma.product.create({
         data: createProductDto,
         select: {
           id: true,
@@ -100,13 +100,13 @@ export class ProductsService {
       if (productReviews) {
         return productReviews;
       }
-      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
     } catch (error) {
       throw new HttpException(
         'Falha ao obter as avaliações do produto. Tente novamente mais tarde.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
   /**
