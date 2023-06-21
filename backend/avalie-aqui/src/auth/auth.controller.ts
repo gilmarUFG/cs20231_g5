@@ -1,4 +1,4 @@
-import { LoginDto } from './dto';
+import { LoginDto, RefreshTokenDto } from './dto';
 import { AuthService } from './auth.service';
 import { Body, Controller, Post, HttpCode } from '@nestjs/common';
 import {
@@ -64,6 +64,42 @@ export class AuthController {
     return await this.authService.login(data);
   }
 
+  // Refresh token de usuário
+  @Post('refresh')
+  @HttpCode(200)
+  @ApiResponse({
+    // Documentação da resposta pro swagger
+    status: 200,
+    description: 'Token atualizado com sucesso',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            access_token: 'token',
+            refresh_token: 'token',
+          },
+        },
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    // Documentação da resposta pro swagger
+    description: 'Caso o token esteja expirado ou inválido',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            statusCode: 401,
+            message: 'Token Expirado',
+          },
+        },
+      },
+    },
+  })
+  async refreshUser(@Body() data: RefreshTokenDto) {
+    return await this.authService.refreshUser(data.refresh_token);
+  }
+
   // Login de admnistrador
   @Post('admin/login')
   @HttpCode(200)
@@ -112,5 +148,41 @@ export class AuthController {
   })
   async loginAdmin(@Body() data: LoginDto) {
     return await this.authService.loginAdmin(data);
+  }
+
+  // Refresh token de usuário
+  @Post('admin/refresh')
+  @HttpCode(200)
+  @ApiResponse({
+    // Documentação da resposta pro swagger
+    status: 200,
+    description: 'Token atualizado com sucesso',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            access_token: 'token',
+            refresh_token: 'token',
+          },
+        },
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    // Documentação da resposta pro swagger
+    description: 'Caso o token esteja expirado ou inválido',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            statusCode: 401,
+            message: 'Token Expirado/Assinatura Inválida',
+          },
+        },
+      },
+    },
+  })
+  async refreshAdmin(@Body() data: RefreshTokenDto) {
+    return await this.authService.refreshAdmin(data.refresh_token);
   }
 }

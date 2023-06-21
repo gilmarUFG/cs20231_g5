@@ -14,7 +14,7 @@ export class ReviewsService {
    */
   async create(createReviewDto: CreateReviewDto) {
     try {
-      let review = await this.prisma.review.create({
+      const review = await this.prisma.review.create({
         data: createReviewDto,
         select: {
           id: true,
@@ -101,13 +101,13 @@ export class ReviewsService {
       if (review) {
         return review;
       }
-      throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
     } catch (error) {
       throw new HttpException(
         'Falha ao obter dados da avaliação. Tente novamente mais tarde.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
   }
 
   update(id: number, updateReviewDto: UpdateReviewDto) {
