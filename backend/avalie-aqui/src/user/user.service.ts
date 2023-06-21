@@ -65,7 +65,7 @@ export class UserService {
    * @returns object
    */
   getUser(req: any) {
-    let user: User = req.user;
+    const user: User = req.user;
     return this.prisma.user.findUnique({
       where: {
         id: user.id,
@@ -111,13 +111,13 @@ export class UserService {
       if (productReviews) {
         return productReviews;
       }
-      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
     } catch (error) {
       throw new HttpException(
         'Falha ao obter as avaliações do produto. Tente novamente mais tarde.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
   // --------------------------------------------------

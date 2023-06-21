@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { slugify } from './util/functions';
 
 @Injectable()
 export class AppService {

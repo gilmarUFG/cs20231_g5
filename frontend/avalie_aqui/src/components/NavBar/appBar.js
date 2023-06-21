@@ -6,7 +6,6 @@ import decode from 'jwt-decode';
 import memories from '../../images/avalie.png';
 
 export default function Navbar() {
-
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,67 +18,68 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    const token = user?.token;
+    const token = user?.access_token;
 
     if (token) {
       const decodeToken = decode(token);
 
       if (decodeToken.exp * 1000 < new Date().getTime()) logout();
+      const teste = decode(token);
+      console.log(teste);
+      setUser(teste);
     }
-
-    setUser(JSON.parse(localStorage.getItem('profile')));
   }, [location]);
 
   return (
-    <AppBar  position="static" color="inherit">
-      <div >
-        <Typography
-         
-          variant="h2"
-          align="center"
-        >
-          Avalie Aqui!
-        </Typography>
-        <img  src={memories} alt="icon" height="60" />
-      </div>
-      <Toolbar >
-        <Button
-          component={Link}
-          to="/"
-          
-          color={location.pathname === '/' ? 'primary' : 'inherit'}
-        >
-          Home
-        </Button>
-       
-        <Button
-          component={Link}
-          to="/cadprod"
-          
-          color={
-            location.pathname === '/cadastro-produtos' ? 'primary' : 'inherit'
-          }
-        >
-          Cadastro de Produtos
-        </Button>
+    <AppBar position="static" sx={{ backgroundColor: '#006064' }}>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div sx={{ display: 'flex', alignItems: 'center' }}>
+          <img src={memories} alt="icon" height="60" sx={{ marginRight: '5px' }} />
+          <Typography variant="h5" sx={{ color: 'white' }}>
+            Avalie Aqui!
+          </Typography>
+        </div>
+        <div sx={{ display: 'flex', alignItems: 'center' }}>
+          <Button
+            component={Link}
+            to="/"
+            sx={{ color: location.pathname === '/' ? 'white' : '#B2EBF2' }}
+          >
+            Home
+          </Button>
+          <Button
+            component={Link}
+            to="/cadprod"
+            sx={{ color: location.pathname === '/cadastro-produtos' ? 'white' : '#B2EBF2' }}
+          >
+            Cadastro de Produtos
+          </Button>
+        </div>
         {user ? (
-          <div >
-            
+          <div sx={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar sx={{ bgcolor: '#FF4081', marginRight: '10px' }}>
+              {user.name.charAt(0)}
+            </Avatar>
+            <div sx = {5}>
+              <Typography variant="h6" sx={{ color: 'white' }}>
+                {user.name}
+              </Typography>
+              
+            </div>
             <Button
-              variant="contained"
-              className={logout}
-              color="secondary"
-              onClick={logout}
-            >
-              Sair
-            </Button>
+                variant="contained"
+                sx={{ marginLeft: '10px', height: '32px', fontSize: '12px' }}
+                color="secondary"
+                onClick={logout}
+              >
+                Sair
+              </Button>
           </div>
         ) : (
           <Button
             component={Link}
             to="/login"
-            
-            color={location.pathname === '/login' ? 'primary' : 'inherit'}
+            sx={{ color: location.pathname === '/login' ? 'white' : '#B2EBF2' }}
           >
             Login
           </Button>
@@ -88,18 +88,3 @@ export default function Navbar() {
     </AppBar>
   );
 }
-
-
-/*
-<Avatar
-              
-              alt={user.result.name}
-              
-            >
-              {user.result.name.charAt(0)}
-            </Avatar>
-            <Typography  variant="h6">
-              {user.name}
-            </Typography>
-
-            */
