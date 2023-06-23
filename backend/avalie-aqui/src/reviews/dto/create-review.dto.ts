@@ -4,6 +4,7 @@ import {
   IsDecimal,
   IsInt,
   IsNotEmpty,
+  IsNumberString,
   IsString,
   MaxLength,
   isNotEmpty,

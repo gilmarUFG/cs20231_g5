@@ -203,12 +203,6 @@ export class ProductsService {
       });
 
       if (product) {
-        // Excluir as avaliações do produto
-        await this.prisma.review.deleteMany({
-          where: {
-            ratedProductId: id,
-          },
-        });
         // Excluir o produto
         await this.prisma.product.delete({
           where: { id: id },
