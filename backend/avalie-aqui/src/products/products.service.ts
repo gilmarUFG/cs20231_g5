@@ -158,17 +158,70 @@ export class ProductsService {
     throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * Atualiza os dados de um produto
+   * @param id
+   * @param updateProductDto
+   * @returns
+   */
   async update(id: number, updateProductDto: UpdateProductDto) {
-    return await this.prisma.product.update({
-      where:{id: id},
-      data: updateProductDto
-    });
+    try {
+      const product = await this.prisma.product.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (product) {
+        // Atualizar o produto
+        await this.prisma.product.update({
+          where: { id: id },
+          data: updateProductDto,
+        });
+        return { message: 'Produto alterado com sucesso.' };
+      }
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao atualizar dados do produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * Delete um produto
+   * @param id
+   * @returns
+   */
   async remove(id: number) {
-    return await this.prisma.product.delete({
-      where: {id: id}
-    });
+    try {
+      const product = await this.prisma.product.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (product) {
+        // Excluir as avaliações do produto
+        await this.prisma.review.deleteMany({
+          where: {
+            ratedProductId: id,
+          },
+        });
+        // Excluir o produto
+        await this.prisma.product.delete({
+          where: { id: id },
+        });
+        return { message: 'Produto excluído com sucesso.' };
+      }
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao excluir produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
   // --------------------------------------------------
