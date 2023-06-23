@@ -158,12 +158,17 @@ export class ProductsService {
     throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    return await this.prisma.product.update({
+      where:{id: id},
+      data: updateProductDto
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    return await this.prisma.product.delete({
+      where: {id: id}
+    });
   }
 
   // --------------------------------------------------
