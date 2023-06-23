@@ -110,34 +110,34 @@ export class ReviewsService {
     throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
   }
 
-  /**
+/**
    * Atualiza os dados de uma avaliação
    * @param updateReviewDto
    * @returns
    */
-  async update(id: number, updateReviewDto: Partial<UpdateReviewDto>) {
-    try {
-      const review = await this.prisma.review.findUnique({
-        where: {
-          id: id,
-        },
+async update(id: number, updateReviewDto: Partial<UpdateReviewDto>) {
+  try {
+    const review = await this.prisma.review.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (review) {
+      // Atualiza os dados da avaliação
+      await this.prisma.review.update({
+        where: { id: id },
+        data: updateReviewDto,
       });
-      if (review) {
-        // Atualiza os dados da avaliação
-        await this.prisma.review.update({
-          where: { id: id },
-          data: updateReviewDto,
-        });
-        return { message: 'Avaliação atualizada com sucesso.' };
-      }
-    } catch (error) {
-      throw new HttpException(
-        'Falha ao atualizar dados da avaliação. Tente novamente mais tarde.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      return { message: 'Avaliação atualizada com sucesso.' };
     }
-    throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
+  } catch (error) {
+    throw new HttpException(
+      'Falha ao atualizar dados da avaliação. Tente novamente mais tarde.',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
+  throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
+}
 
   /**
    * Deleta uma avaliação
@@ -165,5 +165,12 @@ export class ReviewsService {
       );
     }
     throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
+    try {
+      return await this.prisma.review.delete({
+        where: {id: id},
+      });
+    } catch (error) {
+      throw new HttpException('Falha ao Excluir Avaliação', HttpStatus.BAD_REQUEST);
+    }
   }
 }
