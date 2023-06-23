@@ -110,11 +110,16 @@ export class ReviewsService {
     throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
   }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
+  async update(id: number, updateReviewDto: Partial<UpdateReviewDto>) {
+    return await this.prisma.review.update({
+      where: {id},
+      data: updateReviewDto
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  async remove(id: number) {
+    return await this.prisma.review.delete({
+      where: {id: id},
+    });
   }
 }
