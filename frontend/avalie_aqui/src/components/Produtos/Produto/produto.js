@@ -7,6 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import ReviewComponent from '../../Review/doReview.js';
+import * as api from '../../../api/index';
 
 const Produto = ({ produto }) => {
   const [showReview, setShowReview] = React.useState(false);
@@ -14,6 +15,22 @@ const Produto = ({ produto }) => {
   const handleAvaliarClick = () => {
     setShowReview(true);
   };
+
+
+  React.useEffect(() => {
+    const fetchProdutos = async () => {
+      try {
+        const reviewavg = await api.getReviewsByProductId(produto.id);
+        console.log(reviewavg)
+        
+      } catch (error) {
+        console.error('Erro ao buscar avaliações:', error);
+      }
+    };
+
+    
+  }, []);
+
 
   return (
     <Grid item key={produto}>
