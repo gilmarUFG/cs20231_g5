@@ -15,6 +15,31 @@ export const signUp = (formData) => api.post('/user/register', formData);
 
 export const getProdutos = () => api.get('/products');
 
+export const doReview = async (formData) => {
+  const cadProdApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
+
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  const token = profile?.access_token;
+  
+  if (token) {
+    console.log("Token = " + token)
+    cadProdApi.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+  
+  try {
+    const response = await cadProdApi.post('/reviews', formData);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error('Error saving review:', error);
+    throw error;
+  }
+};
+
+
+
+
+
 export const cadProd = async (formData) => {
   const cadProdApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
   

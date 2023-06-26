@@ -6,7 +6,8 @@ import decode from 'jwt-decode';
 import memories from '../../images/avalie.png';
 
 export default function Navbar() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const storedProfile = JSON.parse(localStorage.getItem('profile'));
+  const [user, setUser] = useState(storedProfile || {});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,7 +15,7 @@ export default function Navbar() {
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
     navigate('/');
-    setUser(null);
+    setUser({});
   };
 
   useEffect(() => {
@@ -24,9 +25,8 @@ export default function Navbar() {
       const decodeToken = decode(token);
 
       if (decodeToken.exp * 1000 < new Date().getTime()) logout();
-      const teste = decode(token);
-      console.log(teste);
-      setUser(teste);
+
+      setUser(decodeToken);
     }
   }, [location]);
 
@@ -55,25 +55,24 @@ export default function Navbar() {
             Cadastro de Produtos
           </Button>
         </div>
-        {user ? (
+        {user && user.name ? (
           <div sx={{ display: 'flex', alignItems: 'center' }}>
             <Avatar sx={{ bgcolor: '#FF4081', marginRight: '10px' }}>
               {user.name.charAt(0)}
             </Avatar>
-            <div sx = {5}>
+            <div sx={{ marginRight: '10px' }}>
               <Typography variant="h6" sx={{ color: 'white' }}>
                 {user.name}
               </Typography>
-              
             </div>
             <Button
-                variant="contained"
-                sx={{ marginLeft: '10px', height: '32px', fontSize: '12px' }}
-                color="secondary"
-                onClick={logout}
-              >
-                Sair
-              </Button>
+              variant="contained"
+              sx={{ marginLeft: '10px', height: '32px', fontSize: '12px' }}
+              color="secondary"
+              onClick={logout}
+            >
+              Sair
+            </Button>
           </div>
         ) : (
           <Button
