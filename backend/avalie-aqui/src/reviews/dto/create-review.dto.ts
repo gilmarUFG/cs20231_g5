@@ -4,6 +4,8 @@ import {
   IsDecimal,
   IsInt,
   IsNotEmpty,
+  IsNumber,
+  IsNumberString,
   IsString,
   MaxLength,
   isNotEmpty,
@@ -32,7 +34,7 @@ export class CreateReviewDto {
   ratedProductId: number;
 
   @IsNotEmpty()
-  @IsDecimal()
+  @IsNumber({ maxDecimalPlaces: 1 })
   @ApiProperty({
     description: 'Nota de Avaliação',
     type: 'float',

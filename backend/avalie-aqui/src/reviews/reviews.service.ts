@@ -110,11 +110,67 @@ export class ReviewsService {
     throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
   }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
+/**
+   * Atualiza os dados de uma avaliação
+   * @param updateReviewDto
+   * @returns
+   */
+async update(id: number, updateReviewDto: Partial<UpdateReviewDto>) {
+  try {
+    const review = await this.prisma.review.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (review) {
+      // Atualiza os dados da avaliação
+      await this.prisma.review.update({
+        where: { id: id },
+        data: updateReviewDto,
+      });
+      return { message: 'Avaliação atualizada com sucesso.' };
+    }
+  } catch (error) {
+    throw new HttpException(
+      'Falha ao atualizar dados da avaliação. Tente novamente mais tarde.',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
+  throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
+}
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  /**
+   * Deleta uma avaliação
+   * @param id
+   * @returns
+   */
+  async remove(id: number) {
+    try {
+      const review = await this.prisma.review.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      if (review) {
+        // Deleta a avaliação
+        await this.prisma.review.delete({
+          where: { id: id },
+        });
+        return { message: 'Avaliação excluída com sucesso.' };
+      }
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao excluir avaliação. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    throw new HttpException('Avaliação inválida.', HttpStatus.BAD_REQUEST);
+    try {
+      return await this.prisma.review.delete({
+        where: {id: id},
+      });
+    } catch (error) {
+      throw new HttpException('Falha ao Excluir Avaliação', HttpStatus.BAD_REQUEST);
+    }
   }
 }

@@ -7,4 +7,6 @@ export class Review {
   ratedProduct: Product;
   rating: number;
   comments: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
