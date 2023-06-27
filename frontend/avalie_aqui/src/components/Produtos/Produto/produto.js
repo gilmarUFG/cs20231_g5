@@ -16,21 +16,18 @@ const Produto = ({ produto }) => {
     setShowReview(true);
   };
 
-
   React.useEffect(() => {
     const fetchProdutos = async () => {
       try {
         const reviewavg = await api.getReviewsByProductId(produto.id);
-        console.log(reviewavg)
-        
+        console.log(reviewavg);
       } catch (error) {
         console.error('Erro ao buscar avaliações:', error);
       }
     };
 
-    
+    fetchProdutos();
   }, []);
-
 
   return (
     <Grid item key={produto}>
@@ -48,6 +45,8 @@ const Produto = ({ produto }) => {
             {produto.name}
           </Typography>
           <Typography>{produto.category}</Typography>
+          
+          <Typography>{(produto.average_rating).toFixed(2)}</Typography>
         </CardContent>
         <CardActions>
           <Button size="small" onClick={handleAvaliarClick}>
@@ -55,7 +54,7 @@ const Produto = ({ produto }) => {
           </Button>
         </CardActions>
       </Card>
-      {showReview && <ReviewComponent productId = {produto.id} />}
+      {showReview && <ReviewComponent productId={produto.id} />}
     </Grid>
   );
 };
