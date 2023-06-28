@@ -1,4 +1,4 @@
-import { Typography, Box, Button } from '@mui/material';
+import { Typography, Box, Button, TextField } from '@mui/material';
 import { z } from 'zod';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -123,8 +123,8 @@ const ReviewComponent = ({ productId }) => {
           ★
         </Button>
       </Box>
-      <textarea
-        placeholder="Comentários"
+      <TextField
+        placeholder="Seu Comentário"
         value={comments}
         onChange={(event) => setComments(event.target.value)}
         style={{ width: '100%', height: '100px', marginTop: '10px' }}
