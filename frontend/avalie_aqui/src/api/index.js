@@ -20,6 +20,11 @@ export const getReviewsByProductId = async (productId) => {
   return response.data;
 };
 
+export const getProductByProductId = async (productId) => {
+  const response = await api.get(`/products/${productId}`);
+  return response.data;
+};
+
 
 
 export const doReview = async (formData) => {

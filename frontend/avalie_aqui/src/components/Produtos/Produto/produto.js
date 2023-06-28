@@ -11,6 +11,7 @@ import * as api from '../../../api/index';
 
 const Produto = ({ produto }) => {
   const [showReview, setShowReview] = React.useState(false);
+  const [avgprod, setAvgProd] = React.useState(0.0);
 
   const handleAvaliarClick = () => {
     setShowReview(true);
@@ -21,6 +22,9 @@ const Produto = ({ produto }) => {
       try {
         const reviewavg = await api.getReviewsByProductId(produto.id);
         console.log(reviewavg);
+        const produtomed = await api.getProductByProductId(produto.id);
+        console.log(produtomed);
+        setAvgProd(produtomed.product.average_rating);
       } catch (error) {
         console.error('Erro ao buscar avaliações:', error);
       }
@@ -45,8 +49,8 @@ const Produto = ({ produto }) => {
             {produto.name}
           </Typography>
           <Typography>{produto.category}</Typography>
-          
-          <Typography>{(produto.average_rating).toFixed(2)}</Typography>
+         
+          <Typography>{avgprod}</Typography>
         </CardContent>
         <CardActions>
           <Button size="small" onClick={handleAvaliarClick}>
