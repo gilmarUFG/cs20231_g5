@@ -15,6 +15,18 @@ export const signUp = (formData) => api.post('/user/register', formData);
 
 export const getProdutos = () => api.get('/products');
 
+export const getReviewsByProductId = async (productId) => {
+  const response = await api.get(`/products/${productId}/reviews`);
+  return response.data;
+};
+
+export const getProductByProductId = async (productId) => {
+  const response = await api.get(`/products/${productId}`);
+  return response.data;
+};
+
+
+
 export const doReview = async (formData) => {
   const cadProdApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
 
