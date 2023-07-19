@@ -127,7 +127,7 @@ const ReviewComponent = ({ productId }) => {
         placeholder="Seu Comentário"
         value={comments}
         onChange={(event) => setComments(event.target.value)}
-        style={{ width: '100%', height: '100px', marginTop: '10px' }}
+        style={{ width: '100%', height: '100%', marginTop: '10px' }}
       />
       <Button variant="contained" onClick={handleSaveReview}>
         Salvar Avaliação

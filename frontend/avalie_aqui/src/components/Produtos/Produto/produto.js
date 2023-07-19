@@ -9,10 +9,12 @@ import Typography from '@mui/material/Typography';
 import ReviewComponent from '../../Review/doReview.js';
 import * as api from '../../../api/index';
 import ReactStars from 'react-star-ratings';
+import ExpandedProduto from './produtExpand.js';
 
 const Produto = ({ produto }) => {
   const [showReview, setShowReview] = React.useState(false);
   const [avgprod, setAvgProd] = React.useState(0.0);
+  const [expandedProduct, setExpandedProduct] = React.useState(null);
 
   const handleAvaliarClick = () => {
     setShowReview(true);
@@ -34,45 +36,71 @@ const Produto = ({ produto }) => {
     fetchProdutos();
   }, []);
 
+  const handleCardClick = () => {
+    setExpandedProduct(produto);
+  };
+
+  const handleExpandedClose = () => {
+    setExpandedProduct(null);
+  };
+
   return (
-    <Grid item key={produto}>
-      <Card sx={{ height: '70%', width: '80%', display: 'flex', flexDirection: 'column' }}>
-        <CardMedia
-          component="div"
-          sx={{
-            // 16:9
-            pt: '90.25%',
+    <React.Fragment>
+      {expandedProduct ? (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
           }}
-          image={produto.image_url || 'https://source.unsplash.com/random?wallpapers'}
-        />
-        <CardContent sx={{ flexGrow: 2 }}>
-          <Typography gutterBottom variant="h7" component="h4">
-            {produto.name}
-          </Typography>
-          <Typography>{produto.category}</Typography>
+          
+        >
+          <ExpandedProduto produto={expandedProduct} onClose={handleExpandedClose} />
+        </div>
+      ) : (
+        <Grid item key={produto}>
+          <Card
+            sx={{ height: '70%', width: '80%', display: 'flex', flexDirection: 'column' }}
+            onClick={handleCardClick}
+          >
+            <CardMedia
+              component="div"
+              sx={{
+                // 16:9
+                pt: '90.25%',
+              }}
+              image={produto.image_url || 'https://source.unsplash.com/random?wallpapers'}
+            />
+            <CardContent sx={{ flexGrow: 2 }}>
+              <Typography gutterBottom variant="h7" component="h4">
+                {produto.name}
+              </Typography>
+              <Typography>{produto.category}</Typography>
 
-          <ReactStars
-            count={5}
-            starDimension = "30px"
-            rating={avgprod}
-            edit={true}
-            isHalf={true}
-            emptyIcon={<i className="far fa-star"></i>}
-            halfIcon={<i className="fa fa-star-half-alt"></i>}
-            fullIcon={<i className="fa fa-star"></i>}
-            starRatedColor="yellow"
-          />
-
-        </CardContent>
-        <CardActions>
-          <Button size="small" onClick={handleAvaliarClick}>
-            Avaliar
-          </Button>
-        </CardActions>
-        {showReview && <ReviewComponent productId={produto.id} />}
-      </Card>
-     
-    </Grid>
+              <ReactStars
+                count={5}
+                starDimension="30px"
+                rating={avgprod}
+                edit={true}
+                isHalf={true}
+                emptyIcon={<i className="far fa-star"></i>}
+                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                fullIcon={<i className="fa fa-star"></i>}
+                starRatedColor="yellow"
+              />
+            </CardContent>          
+            
+          </Card>
+        </Grid>
+      )}
+    </React.Fragment>
   );
 };
 
