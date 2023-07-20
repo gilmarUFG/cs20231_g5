@@ -14,9 +14,11 @@ import EditSharpIcon from '@mui/icons-material/EditSharp';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { relative } from 'path-browserify';
 import ReviewList from '../../Review/reviewList.js';
+import UpDateProd from '../Update/updtProdForm.js';
 
-const ProductImage = ({ imageUrl }) => (
-  
+// ... rest of the code ...
+
+const ProductImage = ({ imageUrl, onEditClick }) => (
   <div style={{ position: 'relative', width: '100%', height: '150%' }}>
     <CardMedia
       component="div"
@@ -30,47 +32,66 @@ const ProductImage = ({ imageUrl }) => (
       image={imageUrl || 'https://source.unsplash.com/random?wallpapers'}
     />
     <EditSharpIcon
+      onClick={onEditClick} // Use the onEditClick prop here
       style={{
         position: 'absolute',
         top: 0,
         left: 0,
         margin: '5px',
-        backgroundColor: "whitesmoke",
-        borderRadiusb: "10",
-        shapeMargin: "circle",
-        color: 'black', // Customize the color of the icon as needed
-        fontSize: '24px', // Customize the size of the icon as needed
+        backgroundColor: 'whitesmoke',
+        borderRadius: '10',
+        shapeMargin: 'circle',
+        color: 'black',
+        fontSize: '24px',
       }}
     />
-  </div>  
-  
+  </div>
 );
 
-const ProductInfo = ({ name, category, rating }) => (
-  <CardContent sx={{ flexGrow: 2, width: '100%', alignItems: 'flex-start' }}>
-    <Typography gutterBottom variant="h3" component="h4">
-      {name}
-    </Typography>
-    <Typography>{category}</Typography>
+// ... rest of the code ...
 
-    <ReactStars
-      count={5}
-      starDimension="50px"
-      rating={rating}
-      edit={true}
-      isHalf={true}
-      emptyIcon={<i className="far fa-star"></i>}
-      halfIcon={<i className="fa fa-star-half-alt"></i>}
-      fullIcon={<i className="fa fa-star"></i>}
-      starRatedColor="yellow"
-    />
-  </CardContent>
-);
+
+const ProductInfo = ({ name, category, rating }) => {
+  // Verificar se rating é um número válido ou definir o valor padrão como 0
+  if(rating === null)
+  {console.log("Rating possui null")}
+  const normalizedRating = rating && typeof rating === 'number' ? rating : 0.0;
+
+  return (
+    <CardContent sx={{ flexGrow: 2, width: '100%', alignItems: 'flex-start' }}>
+      <Typography gutterBottom variant="h3" component="h4">
+        {name}
+      </Typography>
+      <Typography>{category}</Typography>
+
+      <ReactStars
+        count={5}
+        starDimension="50px"
+        rating={normalizedRating}
+        edit={true}
+        isHalf={true}
+        emptyIcon={<i className="far fa-star"></i>}
+        halfIcon={<i className="fa fa-star-half-alt"></i>}
+        fullIcon={<i className="fa fa-star"></i>}
+        starRatedColor="yellow"
+      />
+    </CardContent>
+  );
+};
+
+
+
 
 const ExpandedProduto = ({ produto, onClose }) => {
   const [showReview, setShowReview] = React.useState(false);
   const [avgprod, setAvgProd] = React.useState(0.0);
   const [reviews, setReviews] = React.useState([]);
+  const [isEditMode, setIsEditMode] = React.useState(false); // State to track edit mode
+
+
+  const handleEditClick = () => {
+    setIsEditMode(true);
+  };
 
   const handleAvaliarClick = async () => {
     setShowReview(true);
@@ -97,6 +118,8 @@ const ExpandedProduto = ({ produto, onClose }) => {
     fetchProdutos();
   }, []);
 
+  
+
   const handleBackClick = () => {
     setShowReview(false);
     onClose();
@@ -106,8 +129,12 @@ const ExpandedProduto = ({ produto, onClose }) => {
     <Grid item key={produto}>
       <Card sx={{ height: '530px', width: '1200px',alignItems: 'left' }}>
         <Grid container justifyContent="flex-start" spacing={1}>
-          <Grid item  xs={4}>            
-            <ProductImage imageUrl={produto.image_url} />
+          <Grid item sx={{ alignItems: 'center' }} xs={4}>            
+          {isEditMode ? ( // Render the update product form when in edit mode
+              <UpDateProd produto={produto} onClose={() => setIsEditMode(false)} />
+            ) : (
+              <ProductImage imageUrl={produto.image_url} onEditClick={handleEditClick} />
+            )}
           </Grid>
           <Grid item xs={8}>            
               <ProductInfo name={produto.name} category={produto.category} rating={avgprod} />            

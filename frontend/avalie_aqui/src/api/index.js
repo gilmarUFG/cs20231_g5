@@ -25,6 +25,11 @@ export const getProductByProductId = async (productId) => {
   return response.data;
 };
 
+export const putProductByProductId = async (productId, formData) => {
+  const response = await api.put(`/products/${productId}`, formData);
+  return response.data;
+};
+
 
 
 export const doReview = async (formData) => {

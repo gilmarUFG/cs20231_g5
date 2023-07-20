@@ -20,6 +20,7 @@ const Produto = ({ produto }) => {
     setShowReview(true);
   };
 
+  
   React.useEffect(() => {
     const fetchProdutos = async () => {
       try {
@@ -27,7 +28,8 @@ const Produto = ({ produto }) => {
         console.log(reviewavg);
         const produtomed = await api.getProductByProductId(produto.id);
         console.log(produtomed);
-        setAvgProd(produtomed.product.average_rating);
+        // Verificar se o valor de produtomed.product.average_rating é válido antes de definir avgprod
+        setAvgProd(produtomed.product.average_rating || 0);
       } catch (error) {
         console.error('Erro ao buscar avaliações:', error);
       }
@@ -35,6 +37,8 @@ const Produto = ({ produto }) => {
 
     fetchProdutos();
   }, []);
+
+
 
   const handleCardClick = () => {
     setExpandedProduct(produto);
