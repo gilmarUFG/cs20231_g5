@@ -66,14 +66,14 @@ export const cadProd = async (formData) => {
 
 
 export const putProductByProductId = async (productId, formData) => {
-  const cadProdApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
+  const putProdApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
   
   const profile = JSON.parse(localStorage.getItem('profile'));
   const token = profile?.access_token;
   if (localStorage.getItem('profile')) {
-    cadProdApi.defaults.headers.common.Authorization = `Bearer ${token}`;
+    putProdApi.defaults.headers.common.Authorization = `Bearer ${token}`;
   }
   
-  const response = await api.put(`/products/${productId}`, formData);
+  const response = await putProdApi.put(`/products/${productId}`, formData);
   return response.data;
 };

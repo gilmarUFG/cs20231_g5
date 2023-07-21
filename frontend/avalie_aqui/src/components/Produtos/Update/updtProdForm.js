@@ -39,9 +39,15 @@ export default function UpDateProd({ produto }) {
       }
 
       console.log('Token acessado: ', token);
+      console.log('dados que são passados:  ', data);
       const response = await api.putProductByProductId(produto.id, data);
       toast.success('Produto atualizado com sucesso!');
+      
       console.log('Sucesso!', response);
+      // Aguarde 1 segundo antes de recarregar a página
+      setTimeout(() => {
+      window.location.reload();
+    }, 1000);
     } catch (error) {
       console.error('Falha:', error.response.data);
       toast.error('Falha ao atualizar o produto. Por favor, tente novamente.');
