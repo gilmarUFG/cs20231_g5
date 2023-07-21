@@ -25,12 +25,6 @@ export const getProductByProductId = async (productId) => {
   return response.data;
 };
 
-export const putProductByProductId = async (productId, formData) => {
-  const response = await api.put(`/products/${productId}`, formData);
-  return response.data;
-};
-
-
 
 export const doReview = async (formData) => {
   const cadProdApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
@@ -67,5 +61,19 @@ export const cadProd = async (formData) => {
   }
   
   const response = await cadProdApi.post('/products', formData);
+  return response.data;
+};
+
+
+export const putProductByProductId = async (productId, formData) => {
+  const cadProdApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
+  
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  const token = profile?.access_token;
+  if (localStorage.getItem('profile')) {
+    cadProdApi.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+  
+  const response = await api.put(`/products/${productId}`, formData);
   return response.data;
 };
