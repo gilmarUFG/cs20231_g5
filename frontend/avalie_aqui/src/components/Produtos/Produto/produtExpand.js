@@ -15,6 +15,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { relative } from 'path-browserify';
 import ReviewList from '../../Review/reviewList.js';
 import UpDateProd from '../Update/updtProdForm.js';
+import AvalieAqui from './avalieAqui.js';
 
 // ... rest of the code ...
 
@@ -127,7 +128,7 @@ const ExpandedProduto = ({ produto, onClose }) => {
 
   return (
     <Grid item key={produto}>
-      <Card sx={{ height: '530px', width: '1200px',alignItems: 'left' }}>
+      <Card sx={{ height: '530px', width: '1200px',alignItems: 'left', backgroundColor:'black' }}>
         <Grid container justifyContent="flex-start" spacing={1}>
           <Grid item sx={{ alignItems: 'center' }} xs={4}>            
           {isEditMode ? ( // Render the update product form when in edit mode
@@ -136,9 +137,23 @@ const ExpandedProduto = ({ produto, onClose }) => {
               <ProductImage imageUrl={produto.image_url} onEditClick={handleEditClick} />
             )}
           </Grid>
-          <Grid item xs={8}>            
-              <ProductInfo name={produto.name} category={produto.category} rating={avgprod} />            
-              <ReviewList productId={produto.id} />            
+          <Grid item xs={8}> 
+
+            <Grid container>
+
+              <Grid item>
+              <ProductInfo name={produto.name} category={produto.category} rating={avgprod} /> 
+              </Grid>
+              
+              <Grid item>
+              <AvalieAqui/> 
+              </Grid>  
+
+              <Grid item>        
+              <ReviewList productId={produto.id} /> 
+              </Grid>  
+            </Grid>
+
             <CardActions
             style={{  
               position: 'absolute',     
