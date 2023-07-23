@@ -70,7 +70,7 @@ export default function Album() {
               color="text.primary"
               gutterBottom
             >
-              Album layout
+              AVALIE AQUI
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               O AvalieAqui é sua plataforma de  avaliação de produtos, devido ao fato de 
@@ -83,8 +83,7 @@ export default function Album() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained">Main call to action</Button>
-              <Button variant="outlined">Secondary action</Button>
+              
             </Stack>
           </Container>
         </Box>
