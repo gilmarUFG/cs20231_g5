@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as api from "../../api/index";
 import ReactStars from "react-star-ratings";
-import { Avatar, Grid, Paper, IconButton } from "@mui/material";
+import { Avatar, Grid, Paper, IconButton, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import AvalieAqui from "../Produtos/Produto/avalieAqui";
+import ReviewComponent from "./doReview";
 
 const imgLink =
   "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
@@ -10,8 +12,9 @@ const imgLink =
 const ReviewList = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
   const [currentComment, setCurrentComment] = useState(0);
+  const [showReviewComponent, setShowReviewComponent] = useState(false); // New state to track the review component visibility
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchReviews = async () => {
       try {
         const revisoes = await api.getReviewsByProductId(productId);
@@ -24,6 +27,10 @@ const ReviewList = ({ productId }) => {
 
     fetchReviews();
   }, [productId]);
+
+  const handleAvalieAquiClick = () => {
+    setShowReviewComponent(true); // Show the review component when the button is clicked
+  };
 
   const handleNextComment = () => {
     setCurrentComment((prevComment) =>
@@ -42,88 +49,98 @@ const ReviewList = ({ productId }) => {
   }
 
   return (
-    <div style={{ padding: "14px 0" }} className="App">
-      <h4 style={{ textAlign: "left", marginLeft: 14 }}>
+    <div className="App">
+      <Typography variant="h5" style={{ textAlign: "left", marginLeft: 10 }}>
         - Avaliações e Comentários
-      </h4>
+      </Typography>
 
-      {/* Container for comments with horizontal scrolling */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "nowrap",
-          overflowX: "hidden", // Hide the horizontal scrollbar
-          margin: "0 auto", // Center the comments
-          alignItems: "center", // Vertically center the arrow buttons and comments
-          position: "relative", // Set position to relative for the arrow buttons
-          height: 200, // Set a fixed height for the comment container
-        }}
-      >
-        {/* Left arrow button */}
-        <IconButton
-          onClick={handlePrevComment}
-          style={{ position: "absolute", left: 0 }}
+      {showReviewComponent ? (
+        // If showReviewComponent is true, render the ReviewComponent
+        <ReviewComponent productId={productId} />
+      ) : (
+        // Div de comentários é aqui
+        <div
+          style={{
+            display: "flex",
+            // flexWrap: "nowrap",
+            overflowX: "hidden", // Hide the horizontal scrollbar
+            marginTop: "35px", // Center the comments
+           // alignItems: "center", // Vertically center the arrow buttons and comments
+            position: "relative", // Set position to relative for the arrow buttons
+            //height: 300, // Set a fixed height for the comment container
+          }}
         >
-          <ArrowBack />
-        </IconButton>
+          {/* Left arrow button */}
+          <IconButton onClick={handlePrevComment} style={{ position: "absolute", left: 0, paddingTop:85 }}>
+            <ArrowBack />
+          </IconButton>
 
-        {reviews.map((review, index) => (
-          <Paper
-            key={review.id}
-            style={{
-              minWidth: 797,
-              minHeight: 170,              
-              marginRight: 10,
-              border: "3px solid black",
-              padding: "10px",
-              display: index === currentComment ? "block" : "none", // Hide other comments
-              margin: "0 auto", // Center the selected comment
-            }}
-          >
-            <Grid container wrap="nowrap" spacing={2}>
-              <Grid item>
-                <Avatar alt="Remy Sharp" src={imgLink} />
-              </Grid>
-              <Grid justifyContent="left" item xs>
-                <h4 style={{ margin: 0, textAlign: "left" }}>
-                  {review.reviewer.name}
-                </h4>
-                <Grid justifyContent="center" item>
-                  <h9 style={{ textAlign: "left" }}>{review.comments}</h9>
-                  <p
-                    style={{
-                      textAlign: "center",
-                      color: "gray",
-                      border: "1px solid white",
-                      borderRadius: 1.5,
-                    }}
-                  >
-                    <ReactStars
-                      count={5}
-                      starDimension="30px"
-                      rating={review.rating || 0}
-                      edit={true}
-                      isHalf={true}
-                      emptyIcon={<i className="far fa-star"></i>}
-                      halfIcon={<i className="fa fa-star-half-alt"></i>}
-                      fullIcon={<i className="fa fa-star"></i>}
-                      starRatedColor="green"
-                    />
-                  </p>
+          {reviews.map((review, index) => (
+            <Paper
+              //key={review.id}
+              style={{
+                minWidth: 797,
+                minHeight: 200,
+                backgroundColor: "#30404F",
+                border: "3px solid black",
+                paddingTop: "20px",
+                paddingBottom: "20px",
+                paddingLeft: "50px",
+                paddingRight: "50px",
+                display: index === currentComment ? "block" : "none", // Hide other comments
+              }}
+            >
+              <Grid container wrap="nowrap" spacing={1}>
+                <Grid item>
+                  <Avatar alt="Remy Sharp" style={{ marginLeft: 36 }} src={imgLink} />
+                  <Typography variant="h6" style={{ margin: 0, textAlign: "left" }}>
+                    {review.reviewer.name}
+                  </Typography>
+                </Grid>
+                <Grid
+                  justifyContent="center"
+                  style={{
+                    paddingLeft: "30px",
+                    paddingRight: "20px",
+                  }}
+                  item
+                  xs
+                >
+                  <Grid container alignItems="center" spacing={0}>
+                    <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
+                      <ReactStars
+                        count={5}
+                        starDimension="20px"
+                        rating={review.rating || 0}
+                        edit={true}
+                        isHalf={true}
+                        emptyIcon={<i className="far fa-star"></i>}
+                        halfIcon={<i className="fa fa-star-half-alt"></i>}
+                        fullIcon={<i className="fa fa-star"></i>}
+                        starRatedColor="white"
+                        starEmptyColor="black"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="body1" style={{ textAlign: "left", color: "white" }}>
+                        {review.comments}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </Paper>
-        ))}
+              <div onClick={handleAvalieAquiClick} style={{ position: "absolute", left: 300, padding: 10, }}>
+                <AvalieAqui />
+              </div>
+            </Paper>
+          ))}
 
-        {/* Right arrow button */}
-        <IconButton
-          onClick={handleNextComment}
-          style={{ position: "absolute", right: 0 }}
-        >
-          <ArrowForward />
-        </IconButton>
-      </div>
+          {/* Right arrow button */}
+          <IconButton onClick={handleNextComment} style={{ position: "absolute", right: 0, paddingTop:85 }}>
+            <ArrowForward />
+          </IconButton>
+        </div>
+      )}
     </div>
   );
 };

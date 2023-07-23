@@ -1,4 +1,4 @@
-import { Typography, Box, Button, TextField } from '@mui/material';
+import { Typography, Box, Button, TextField,Paper } from '@mui/material';
 import { z } from 'zod';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -80,6 +80,21 @@ const ReviewComponent = ({ productId }) => {
   };
 
   return (
+    <Paper
+    
+    style={{
+      minWidth: 797,
+      height: 200,
+      backgroundColor: "#30404F",
+      border: "3px solid black",
+      marginTop: "35px",
+      //paddingTop: "35px",
+      paddingBottom: "20px",
+      paddingLeft: "50px",
+      paddingRight: "50px",
+     
+    }}
+  >
     <Box>
       <Typography variant="h5">Avalie o Produto</Typography>
       <Box>
@@ -133,6 +148,7 @@ const ReviewComponent = ({ productId }) => {
         Salvar Avaliação
       </Button>
     </Box>
+    </Paper>
   );
 };
 

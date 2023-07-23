@@ -10,6 +10,8 @@ import ReviewComponent from '../../Review/doReview.js';
 import * as api from '../../../api/index';
 import ReactStars from 'react-star-ratings';
 import ExpandedProduto from './produtExpand.js';
+import { hover } from '@testing-library/user-event/dist/hover.js';
+import { Scale } from '@mui/icons-material';
 
 const Produto = ({ produto }) => {
   const [showReview, setShowReview] = React.useState(false);
@@ -70,8 +72,14 @@ const Produto = ({ produto }) => {
         </div>
       ) : (
         <Grid item key={produto}>
+
+           <Card
+            sx={{ height: '68%', width: '78%',
+            '&:hover': { boxShadow: '0px 0px 30px 1px rgba(0, 255, 117, 0.30)' }, backgroundImage: 'linear-gradient(163deg, #00ff75 0%, #3700ff 100%)',borderRadius: '15px' }}>
+
+            
           <Card
-            sx={{ height: '70%', width: '80%', display: 'flex', flexDirection: 'column' }}
+            sx={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', '&:hover': { transform: 'scale(0.98)' },borderRadius: '15px' }}
             onClick={handleCardClick}
           >
             <CardMedia
@@ -100,7 +108,7 @@ const Produto = ({ produto }) => {
                 starRatedColor="yellow"
               />
             </CardContent>          
-            
+            </Card>
           </Card>
         </Grid>
       )}

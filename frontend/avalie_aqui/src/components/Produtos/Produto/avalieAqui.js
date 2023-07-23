@@ -103,11 +103,11 @@ const AvalieAqui = () => {
     // Adicione a propriedade transition para suavizar as mudanças de estilo no botão
     position: 'relative',
     padding: '12px 35px',
-    background: '#FEC195',
+    background: '#b0bada',
     fontSize: '17px',
     fontWeight: 500,
     color: '#181818',
-    border: '3px solid #FEC195',
+    border: '3px solid #b0bada',
     borderRadius: '8px',
     boxShadow: '0 0 0 #fec1958c',
     transition: 'background .3s ease-in-out, color .3s ease-in-out, box-shadow .3s ease-in-out',
@@ -125,6 +125,7 @@ const AvalieAqui = () => {
       style={{ ...buttonStyle, ...(isHovered ? buttonHoverStyle : {}) }}
       onMouseEnter={handleButtonHover}
       onMouseLeave={handleButtonLeave}
+      class="button"
     >
       AvalieAqui!!!
       <div className="star-1" style={star1Style}>
