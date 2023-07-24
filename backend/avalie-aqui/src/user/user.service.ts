@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { RegisterUserDto } from './dto';
+import { RegisterUserDto, UpdateUserDto } from './dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
@@ -118,6 +118,28 @@ export class UserService {
       );
     }
     throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * Atualiza os dados de uma avaliação
+   * @param updateUserDto
+   * @returns
+   */
+  async update(req: any, updateUserDto: Partial<UpdateUserDto>) {
+    const user: User = req.user;
+    try {
+      // Atualiza os dados da avaliação
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: updateUserDto,
+      });
+      return { message: 'Usuário atualizado com sucesso.' };
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao atualizar dados do usuário. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // --------------------------------------------------

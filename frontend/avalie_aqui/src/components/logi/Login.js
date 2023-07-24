@@ -42,21 +42,23 @@ const onSubmit = async (data, event) => {
   try {
     if (data.email === 'admin@avalieaqui.com') {
       const response = await api.signInadm({ email: data.email, password: data.password });
-      if (response.data) {
+      if (response.data.statusCode !== 401) {
         const responseData = response.data;
         console.log("responseData: ", responseData);
         dispatch({ type: AUTH, data: responseData });
         console.log("Sucesso ao logar como Administrador!", response);
+        navigate('/home');
       } else {
         console.error("Resposta inválida:", response);
       }
     } else {
       const response = await api.signIn({ email: data.email, password: data.password }); // Corrigido: alterado para api.signIn
-      if (response.data) {
+      if (response.data.statusCode !== 401) {
         const responseData = response.data;
         console.log("responseData: ", responseData);
         dispatch({ type: AUTH, data: responseData });
         console.log("Sucesso!", response);
+        navigate('/home');
       } else {
         console.error("Resposta inválida:", response);
       }
@@ -71,6 +73,8 @@ const navigate = useNavigate();
   const handleSignupLinkClick = () => {
     navigate('/signup');
   };
+
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -124,7 +128,7 @@ const navigate = useNavigate();
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3 }}
-              >
+                >
                 Entrar
               </Button>
               <Grid container>
