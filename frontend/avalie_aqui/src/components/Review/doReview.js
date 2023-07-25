@@ -1,4 +1,4 @@
-import { Typography, Box, Button } from '@mui/material';
+import { Typography, Box, Button, TextField,Paper } from '@mui/material';
 import { z } from 'zod';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -80,6 +80,21 @@ const ReviewComponent = ({ productId }) => {
   };
 
   return (
+    <Paper
+    
+    style={{
+      minWidth: 797,
+      height: 200,
+      backgroundColor: "#30404F",
+      border: "3px solid black",
+      marginTop: "35px",
+      //paddingTop: "35px",
+      paddingBottom: "20px",
+      paddingLeft: "50px",
+      paddingRight: "50px",
+     
+    }}
+  >
     <Box>
       <Typography variant="h5">Avalie o Produto</Typography>
       <Box>
@@ -123,16 +138,17 @@ const ReviewComponent = ({ productId }) => {
           ★
         </Button>
       </Box>
-      <textarea
-        placeholder="Comentários"
+      <TextField
+        placeholder="Seu Comentário"
         value={comments}
         onChange={(event) => setComments(event.target.value)}
-        style={{ width: '100%', height: '100px', marginTop: '10px' }}
+        style={{ width: '100%', height: '100%', marginTop: '10px' }}
       />
       <Button variant="contained" onClick={handleSaveReview}>
         Salvar Avaliação
       </Button>
     </Box>
+    </Paper>
   );
 };
 

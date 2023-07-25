@@ -57,7 +57,7 @@ export default function Album() {
       <main>
         <Box
           sx={{
-            bgcolor: 'background.paper',
+            bgcolor: '#b0bada',
             pt: 8,
             pb: 6,
           }}
@@ -70,12 +70,12 @@ export default function Album() {
               color="text.primary"
               gutterBottom
             >
-              Album layout
+              AVALIE AQUI
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Something short and leading about the collection below—its contents,
-              the creator, etc. Make it short and sweet, but not too short so folks
-              don&apos;t simply skip over it entirely.
+              O AvalieAqui é sua plataforma de  avaliação de produtos, devido ao fato de 
+              não possuir interesse monetário nosso site traz uma avaliação transparente e confiável
+              refletindo a real opinião dos consumidores!
             </Typography>
             <Stack
               sx={{ pt: 4 }}
@@ -83,12 +83,11 @@ export default function Album() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained">Main call to action</Button>
-              <Button variant="outlined">Secondary action</Button>
+              
             </Stack>
           </Container>
         </Box>
-        <Container sx={{ py: 10 }} maxWidth="120%">
+        <Container sx={{ py: 10, backgroundColor: '#30404F' }} maxWidth="120%">
   <Grid container spacing={4}>
     {cards.map((card) => (
       <Grid item key={card} xs={12} sm={8} md={4}>
