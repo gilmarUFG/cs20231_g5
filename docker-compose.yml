@@ -6,8 +6,9 @@ services:
     build:
       context: ./frontend/avalie_aqui
     env_file:
-      - ./frontend/avalie_aqui/src/docker.env
-    entrypoint: ['npm', 'run', 'start']
+      - ./frontend/avalie_aqui/docker.env
+    # entrypoint: ['serve', '-s', 'build']
+    entrypoint: ['npm', 'run', 'start:prod']
     ports:
       - 3080:3000
     networks:
