@@ -6,8 +6,9 @@ services:
     build:
       context: ./frontend/avalie_aqui
     env_file:
-      - ./frontend/avalie_aqui/src/.env.end
-    entrypoint: ['npm', 'run', 'start']
+      - ./frontend/avalie_aqui/docker.env
+    # entrypoint: ['serve', '-s', 'build']
+    entrypoint: ['npm', 'run', 'start:prod']
     ports:
       - 3000:3000
     networks:
@@ -16,6 +17,7 @@ services:
       - ./frontend/avalie_aqui:/app
     depends_on:
       - avalieaqui-api
+    pull_policy: build
     restart: unless-stopped
 
   avalieaqui-api:
@@ -34,6 +36,7 @@ services:
       - ./backend/avalie-aqui:/app
     depends_on:
       - postgres-avalieaqui
+    pull_policy: build
     restart: unless-stopped
 
   postgres-avalieaqui:
