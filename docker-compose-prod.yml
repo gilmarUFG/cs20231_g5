@@ -13,8 +13,6 @@ services:
       - 3000:3000
     networks:
       - avalieaqui-network
-    volumes:
-      - ./frontend/avalie_aqui:/app
     depends_on:
       - avalieaqui-api
     pull_policy: build
@@ -27,13 +25,10 @@ services:
       context: ./backend/avalie-aqui
     env_file:
       - ./backend/avalie-aqui/docker.env
-    entrypoint: ['./wait-for-postgres.sh', 'npm', 'run', 'start']
     ports:
       - 4000:4000
     networks:
       - avalieaqui-network
-    volumes:
-      - ./backend/avalie-aqui:/app
     depends_on:
       - postgres-avalieaqui
     pull_policy: build

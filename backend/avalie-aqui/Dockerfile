@@ -16,3 +16,5 @@ RUN npm run build
 
 # Apaga o arquivo .env caso ele exista
 RUN [ ! -e .env ] || rm .env
+
+ENTRYPOINT [ "./wait-for-postgres.sh", "npm", "run", "start" ]
