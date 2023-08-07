@@ -49,7 +49,7 @@ const ReviewList = ({ productId }) => {
   }
 
   return (
-    <div className="App">
+    <Grid className="App" sx={{width:"100%", height:"70%"}}>
       <Typography variant="h5" style={{ textAlign: "left", marginLeft: 10 }}>
         - Avaliações e Comentários
       </Typography>
@@ -59,15 +59,14 @@ const ReviewList = ({ productId }) => {
         <ReviewComponent productId={productId} />
       ) : (
         // Div de comentários é aqui
-        <div
-          style={{
-            display: "flex",
-            // flexWrap: "nowrap",
+        <Grid
+          sx={{
+            display: "flex",           
             overflowX: "hidden", // Hide the horizontal scrollbar
-            marginTop: "35px", // Center the comments
-           // alignItems: "center", // Vertically center the arrow buttons and comments
+            overflowY: "hidden",
+            marginTop: "35px", // Center the comments          
             position: "relative", // Set position to relative for the arrow buttons
-            //height: 300, // Set a fixed height for the comment container
+            width: "100%",
           }}
         >
           {/* Left arrow button */}
@@ -78,9 +77,9 @@ const ReviewList = ({ productId }) => {
           {reviews.map((review, index) => (
             <Paper
               //key={review.id}
-              style={{
-                minWidth: 797,
-                minHeight: 200,
+              sx={{
+                width: "100%",
+                height: "170px", // Define a altura fixa para o Paper
                 backgroundColor: "#30404F",
                 border: "3px solid black",
                 paddingTop: "20px",
@@ -90,13 +89,22 @@ const ReviewList = ({ productId }) => {
                 display: index === currentComment ? "block" : "none", // Hide other comments
               }}
             >
-              <Grid container wrap="nowrap" spacing={1}>
-                <Grid item>
-                  <Avatar alt="Remy Sharp" style={{ marginLeft: 36 }} src={imgLink} />
-                  <Typography variant="h6" style={{ margin: 0, textAlign: "left" }}>
+              <Grid container wrap="wrap" spacing={1}>
+              <Grid
+                    item
+                    sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center", // Centraliza os itens horizontalmente
+                    justifyContent: "center", // Centraliza os itens verticalmente
+                    }}
+                    >
+                    <Avatar alt="Remy Sharp" sx={{border: "3px solid white",}} src={imgLink} />
+                    <Typography variant="h6" color="white" style={{ margin: 0, textAlign: "center" }}>
                     {review.reviewer.name}
-                  </Typography>
-                </Grid>
+                    </Typography>
+                    <AvalieAqui />
+                    </Grid>
                 <Grid
                   justifyContent="center"
                   style={{
@@ -106,7 +114,7 @@ const ReviewList = ({ productId }) => {
                   item
                   xs
                 >
-                  <Grid container alignItems="center" spacing={0}>
+                  <Grid container alignItems="center" columns={16}  spacing={0} direction="column">
                     <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
                       <ReactStars
                         count={5}
@@ -121,17 +129,20 @@ const ReviewList = ({ productId }) => {
                         starEmptyColor="black"
                       />
                     </Grid>
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="body1" style={{ textAlign: "left", color: "white" }}>
+                    <Grid item  zeroMinWidth xs={12} md={10}>
+                      <Typography  variant="body1" style={{ textAlign: "left", color: "white",maxHeight: '100px',
+                       overflow: 'hidden', // Oculta o texto que ultrapassar a altura máxima
+                       textOverflow: 'ellipsis' // Adiciona reticências no final do texto cortado
+                       
+                    }}>
                         {review.comments}
                       </Typography>
                     </Grid>
                   </Grid>
-                </Grid>
+                </Grid>                  
               </Grid>
-              <div onClick={handleAvalieAquiClick} style={{ position: "absolute", left: 300, padding: 10, }}>
-                <AvalieAqui />
-              </div>
+             
+              
             </Paper>
           ))}
 
@@ -139,9 +150,9 @@ const ReviewList = ({ productId }) => {
           <IconButton onClick={handleNextComment} style={{ position: "absolute", right: 0, paddingTop:85 }}>
             <ArrowForward />
           </IconButton>
-        </div>
+        </Grid>
       )}
-    </div>
+    </Grid>
   );
 };
 

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import decode from 'jwt-decode';
 import * as api from '../../api/index.js';
+import ReactStars from 'react-star-ratings';
 
 const ReviewSchema = z.object({
   rating: z.number().min(1).max(5),
@@ -97,47 +98,17 @@ const ReviewComponent = ({ productId }) => {
   >
     <Box>
       <Typography variant="h5">Avalie o Produto</Typography>
-      <Box>
-        <Button
-          variant={rating >= 1 ? 'contained' : 'outlined'}
-          color={rating >= 1 ? 'warning' : 'inherit'}
-          onClick={() => handleStarClick(1)}
-          style={{ marginRight: '5px' }}
-        >
-          ★
-        </Button>
-        <Button
-          variant={rating >= 2 ? 'contained' : 'outlined'}
-          color={rating >= 2 ? 'warning' : 'inherit'}
-          onClick={() => handleStarClick(2)}
-          style={{ marginRight: '5px' }}
-        >
-          ★
-        </Button>
-        <Button
-          variant={rating >= 3 ? 'contained' : 'outlined'}
-          color={rating >= 3 ? 'warning' : 'inherit'}
-          onClick={() => handleStarClick(3)}
-          style={{ marginRight: '5px' }}
-        >
-          ★
-        </Button>
-        <Button
-          variant={rating >= 4 ? 'contained' : 'outlined'}
-          color={rating >= 4 ? 'warning' : 'inherit'}
-          onClick={() => handleStarClick(4)}
-          style={{ marginRight: '5px' }}
-        >
-          ★
-        </Button>
-        <Button
-          variant={rating >= 5 ? 'contained' : 'outlined'}
-          color={rating >= 5 ? 'warning' : 'inherit'}
-          onClick={() => handleStarClick(5)}
-        >
-          ★
-        </Button>
-      </Box>
+      <ReactStars
+        count={5}
+        starDimension="50px"
+        changeRating={rating}
+        isSelectable= "true"
+        isHalf={true}
+        emptyIcon={<i className="far fa-star"></i>}
+        halfIcon={<i className="fa fa-star-half-alt"></i>}
+        fullIcon={<i className="fa fa-star"></i>}
+        starRatedColor="yellow"
+      />
       <TextField
         placeholder="Seu Comentário"
         value={comments}
