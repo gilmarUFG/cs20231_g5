@@ -84,18 +84,30 @@ const ReviewComponent = ({ productId }) => {
         <Grid item sm={4}>
           <Grid container spacing={1} columns={16} direction="column" alignItems="center">
             <Grid item sm={4}>
-              <Typography variant="h5">Avalie o Produto</Typography>
+              <Typography variant="h5" color={"white"}>Avalie o Produto</Typography>
             </Grid>
 
             <Grid item sm={4}>
               <Rating
                 name="simple-controlled"
                 value={rating}
-                onChange={(newValue) => {
+                onChange={(event,newValue) => {
                   setRating(newValue);
                 }}
                 sx={{
                   fontSize: "3rem",
+                  '& .MuiRating-iconFilled': {
+                    color: 'yellow',
+                  },
+                  '& .MuiRating-iconFocus': {
+                    color: 'orange',
+                  },
+                  '& .MuiRating-iconHover': {
+                    color: 'white',
+                  },
+                  '& .MuiRating-emptyIcon':{
+                    color: 'black',
+                  },
                 }}
                 precision={0.5}
               />
