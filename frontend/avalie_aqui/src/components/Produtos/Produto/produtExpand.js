@@ -36,7 +36,7 @@ const ProductImage = ({ imageUrl, onEditClick }) => {
         component="div"
         sx={{          
           width: "100%",
-          height: "100%",
+          height: "120%",
           cursor: "pointer",
         }}
         image={imageUrl || "https://source.unsplash.com/random?wallpapers"}
@@ -183,9 +183,9 @@ const ExpandedProduto = ({ produto, onClose }) => {
               </Button>
             </CardActions>
 
-            </Grid>
+                 </Grid>
 
-            </Grid>
+              </Grid>
             </Grid>          
           </Grid>
         </Grid>

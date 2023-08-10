@@ -103,7 +103,10 @@ const ReviewList = ({ productId }) => {
                     <Typography variant="h6" color="white" style={{ margin: 0, textAlign: "center" }}>
                     {review.reviewer.name}
                     </Typography>
-                    <AvalieAqui />
+                    <Grid onClick={handleAvalieAquiClick}>
+                     <AvalieAqui />
+                    </Grid>
+                    
                     </Grid>
                 <Grid
                   justifyContent="center"
