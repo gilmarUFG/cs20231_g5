@@ -100,7 +100,7 @@ export default function Album() {
       </main>
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
-          Footer
+          Avaliare
         </Typography>
         <Typography
           variant="subtitle1"
@@ -108,7 +108,7 @@ export default function Album() {
           color="text.secondary"
           component="p"
         >
-          Something here to give the footer a purpose!
+          Seu site de Controle de Qualidade, AVALIE AQUI!!!
         </Typography>
         <Copyright />
       </Box>

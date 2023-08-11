@@ -12,6 +12,7 @@ api.interceptors.request.use((req) => {
 export const signIn = (formData) => api.post('/auth/login', formData);
 export const signInadm = (formData) => api.post('/auth/admin/login', formData);
 export const signUp = (formData) => api.post('/user/register', formData);
+export const signAdmin = (formData) => api.post('/admin/register', formData);
 
 export const putUserById = async (formData) => {
   const putUserApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
