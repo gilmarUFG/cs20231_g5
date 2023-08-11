@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AdminUserService } from './admin_user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AdminUser, PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { RegisterAdminUserDto } from './dto';
 
 describe('AdminUserService', () => {
   let adminUserService: AdminUserService;
@@ -21,6 +23,45 @@ describe('AdminUserService', () => {
   });
 
   describe('register', () => {
+
+    it('should register a new admin user', async () => {
+      // Arrange
+      const registerAdminUserDto: RegisterAdminUserDto = {
+        name: 'João Borges',
+        email: 'joaoborges@gmail.com',
+        password: 'senha123',
+      };
+      const hashedPassword = 'hashedPassword';
+      const createdAdminUser: AdminUser = {
+        id: 1,
+        name: 'João Borges',
+        email: 'joaoborges@gmail.com',
+        password: hashedPassword,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      jest.spyOn(adminUserService, 'emailExists').mockResolvedValue(false);
+      //@ts-ignore
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashedPassword);
+      jest.spyOn(prisma.adminUser, 'create').mockResolvedValue(createdAdminUser);
+
+      // Act
+      const result = await adminUserService.register(registerAdminUserDto);
+
+      // Assert
+      expect(adminUserService.emailExists).toHaveBeenCalledWith(registerAdminUserDto.email);
+      expect(bcrypt.hash).toHaveBeenCalledWith(registerAdminUserDto.password, 10);
+      expect(prisma.adminUser.create).toHaveBeenCalledWith({
+        data: {
+          name: registerAdminUserDto.name,
+          email: registerAdminUserDto.email,
+          password: hashedPassword,
+        },
+        select: { id: true },
+      });
+      expect(result).toEqual(createdAdminUser);
+    });
 
     it('should throw an error if email already exists', async () => {
       // Mock do objeto registerAdminUserDto
