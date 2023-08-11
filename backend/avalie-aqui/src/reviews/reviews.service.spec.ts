@@ -188,7 +188,6 @@ describe('ReviewsService', () => {
     it('should return a review by id', async () => {
       const reviewId = 1;
       const result = await reviewsService.findOne(reviewId);
-      console.log(result);
       expect(result).toEqual({
         id: reviewId,
         rating: 4.5,

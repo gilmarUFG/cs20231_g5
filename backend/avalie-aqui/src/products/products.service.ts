@@ -221,7 +221,7 @@ export class ProductsService {
   // --------------------------------------------------
 
   // Verifica se o nome já existe
-  private async nameExists(name: string) {
+  public async nameExists(name: string) {
     const user = await this.prisma.product.findUnique({
       where: {
         name: name,

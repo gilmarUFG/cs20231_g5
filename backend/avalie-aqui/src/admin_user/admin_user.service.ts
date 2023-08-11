@@ -6,7 +6,10 @@ import { AdminUser } from '@prisma/client';
 
 @Injectable()
 export class AdminUserService {
-  constructor(private prisma: PrismaService) {}
+  static getAdmin(req: { user: AdminUser; }) {
+    throw new Error('Method not implemented.');
+  }
+  constructor(private prisma: PrismaService) { }
 
   /**
    * Cadastrar um novo usuário
@@ -70,7 +73,7 @@ export class AdminUserService {
   // --------------------------------------------------
 
   // Verifica se o email já existe
-  private async emailExists(email: string) {
+  public async emailExists(email: string) {
     const admin = await this.prisma.adminUser.findUnique({
       where: {
         email: email,
@@ -78,14 +81,5 @@ export class AdminUserService {
     });
 
     return !!admin;
-  }
-
-  //Busca admin pelo email
-  async getAdminByEmail(email: string) {
-    return await this.prisma.adminUser.findUnique({
-      where: {
-        email: email,
-      },
-    });
   }
 }

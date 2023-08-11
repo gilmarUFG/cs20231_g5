@@ -22,8 +22,8 @@ const fakeProducts = [
     createdAt: new Date(2023, 7, 19),
     updatedAt: new Date(2023, 7, 21),
     reviews: []
-    },
-    {
+  },
+  {
     id: 3,
     name: 'Samsung Odyssey G9',
     category: 'monitor',
@@ -31,8 +31,8 @@ const fakeProducts = [
     createdAt: new Date(2023, 7, 18),
     updatedAt: new Date(2023, 7, 21),
     reviews: []
-    },
-    {
+  },
+  {
     id: 4,
     name: 'Corsair K95 RGB Platinum XT',
     category: 'teclado',
@@ -40,8 +40,26 @@ const fakeProducts = [
     createdAt: new Date(2023, 7, 17),
     updatedAt: new Date(2023, 7, 21),
     reviews: []
-    }
+  }
 ];
+
+const fakeRatingData = {
+  _avg: {
+    rating: 4.5,
+  },
+  _count: {
+    id: 10,
+  },
+  _sum: {
+    rating: 45,
+  },
+  _min: {
+    rating: 1,
+  },
+  _max: {
+    rating: 5,
+  },
+};
 
 const prismaMock = {
   product: {
@@ -50,7 +68,10 @@ const prismaMock = {
     findUnique: jest.fn().mockResolvedValue(fakeProducts[0]),
     update: jest.fn().mockResolvedValue(fakeProducts[0]),
     delete: jest.fn(),
-  }
+  },
+  review: {
+    aggregate: jest.fn().mockResolvedValue(fakeRatingData),
+  },
 }
 
 describe('ProductsService', () => {
@@ -61,7 +82,7 @@ describe('ProductsService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProductsService,
-        {provide: PrismaService, useValue: prismaMock}
+        { provide: PrismaService, useValue: prismaMock }
       ],
     }).compile();
 
@@ -83,7 +104,7 @@ describe('ProductsService', () => {
 
     it(`should throw an HttpException when an error occurs while getting the product list`, async () => {
       jest.spyOn(prismaMock.product, 'findMany').mockRejectedValue(new Error('Database error'));
-    
+
       try {
         await service.findAll();
       } catch (error) {
@@ -93,7 +114,7 @@ describe('ProductsService', () => {
         );
         expect(error.getStatus()).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
       }
-    
+
       expect(prismaMock.product.findMany).toHaveBeenCalledTimes(1);
       expect(prismaMock.product.findMany).toHaveBeenCalledWith({
         select: {
@@ -104,27 +125,54 @@ describe('ProductsService', () => {
         },
       });
     });
-    
+
 
   });
 
   describe('findOne', () => {
     it(`should return a single product`, async () => {
 
-      jest.spyOn(prismaMock.product, 'findUnique').mockResolvedValue(fakeProducts[0]);
-      try {
-        const response = await service.findOne(1);
-    
-        expect(response).toEqual(fakeProducts[0]);
-        expect(prismaMock.product.findUnique).toHaveBeenCalledTimes(1);
-        expect(prismaMock.product.findUnique).toHaveBeenCalledWith({
-          where: { id: 1 },
-          select: { id: true, name: true, category: true, image_url: true },
-        });
-      } catch (error) {
-        console.error(error);
-      }
+      // Simular a resposta do Prisma para o produto existente
+      jest.spyOn(prisma.product, 'findUnique').mockResolvedValue(fakeProducts[0]);
+
+      // Simular a resposta do Prisma para os dados de classificação
+      jest.spyOn(prisma.review, 'aggregate').mockResolvedValue(fakeRatingData);
+
+      const result = await service.findOne(1);
+
+      expect(result).toEqual({
+        product: {
+          ...fakeProducts[0],
+          average_rating: fakeRatingData._avg.rating,
+          count_ratings: fakeRatingData._count.id,
+        },
+      });
+
+      // Verificar se o método do Prisma foi chamado corretamente
+      expect(prisma.product.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 1,
+        },
+        select: {
+          id: true,
+          name: true,
+          category: true,
+          image_url: true,
+        },
+      });
+      expect(prisma.review.aggregate).toHaveBeenCalledWith({
+        where: {
+          ratedProductId: 1,
+        },
+        _avg: {
+          rating: true,
+        },
+        _count: {
+          id: true,
+        },
+      });
     });
+
 
     it(`should return nothing when product is not found`, async () => {
       jest.spyOn(prisma.product, 'findUnique').mockRejectedValue(undefined);
@@ -141,53 +189,55 @@ describe('ProductsService', () => {
 
   describe('createProduct', () => {
     it('should create a product', async () => {
-      let payload = {
-        id: 1,
-        name: 'RTX 4060 Ti',
-        category: 'placa-de-video',
-        image_url: 'https://files.tecnoblog.net/wp-content/uploads/2023/05/geforce-rtx-4060-ti-back-1060x795.jpg',
-        createdAt: new Date(2023, 7, 20),
-        updatedAt: new Date(2023, 7, 21),
-        reviews: []
-      };
-  
-      try {
-        const createdProduct = await service.create(payload);
-        expect(createdProduct).toBeDefined();
+      // Mock do método nameExists para retornar falso
+      jest.spyOn(service, 'nameExists').mockResolvedValue(false);
 
-        expect(createdProduct).toEqual({
-          ...payload,
-          id: expect.any(Number),
-          createdAt: expect.any(Date), 
-          updatedAt: expect.any(Date), 
-          reviews: [], 
-        });
-    
-        expect(prisma.product.create).toHaveBeenCalledTimes(1);
-        expect(prisma.product.create).toHaveBeenCalledWith({
-          data: payload,
-        });
-      } catch (error) {
-        console.error(error);
-      }
+      // Dados de entrada para o método create
+      const createProductDto = {
+        name: 'Product 1',
+        category: 'Category 1',
+        image_url: '',
+      };
+
+      // Dados de retorno simulados do método create
+      const createdProduct = {
+        id: 1,
+        name: 'Product 1',
+        category: 'Category 1',
+        image_url: '', // Adicione a propriedade image_url com um valor padrão ou deixe em branco
+        createdAt: new Date(), // Adicione a propriedade createdAt com um valor padrão ou deixe em branco
+        updatedAt: new Date(), // Adicione a propriedade updatedAt com um valor padrão ou deixe em branco
+      };
+
+      // Mock do método create para retornar o produto criado
+      jest.spyOn(prisma.product, 'create').mockResolvedValue(createdProduct);
+
+      // Chamar o método create
+      const result = await service.create(createProductDto);
+
+      // Verificar se o método nameExists foi chamado corretamente
+      expect(service.nameExists).toHaveBeenCalledWith(createProductDto.name);
+
+      // Verificar se o resultado retornado é o produto criado
+      expect(result).toEqual(createdProduct);
     });
 
     it(`should throw an HttpException when product name already exists`, async () => {
       const existingProductName = 'RTX 4060 Ti';
-    
+
       jest.spyOn(prismaMock.product, 'findUnique').mockResolvedValue({
         id: 1,
         name: existingProductName,
         category: 'placa-de-video',
         image_url: 'https://example.com/image.jpg',
       });
-    
+
       const createProductDto = {
         name: existingProductName,
         category: 'outra-categoria',
         image_url: 'https://example.com/another-image.jpg',
       };
-    
+
       try {
         await service.create(createProductDto);
       } catch (error) {
@@ -195,19 +245,19 @@ describe('ProductsService', () => {
         expect(error.message).toBe('O Nome especificado já está em uso.');
         expect(error.getStatus()).toBe(HttpStatus.FORBIDDEN);
       }
-    
+
       expect(prismaMock.product.findUnique).toHaveBeenCalledTimes(1);
       expect(prismaMock.product.findUnique).toHaveBeenCalledWith({
         where: { name: existingProductName },
       });
     });
-    
+
   });
 
   describe('updateProduct', () => {
     it(`should throw an HttpException when an error occurs while getting the product list`, async () => {
       jest.spyOn(prismaMock.product, 'findMany').mockRejectedValue(new Error('Database error'));
-    
+
       try {
         await service.findAll();
       } catch (error) {
@@ -217,7 +267,7 @@ describe('ProductsService', () => {
         );
         expect(error.getStatus()).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
       }
-    
+
       expect(prismaMock.product.findMany).toHaveBeenCalledTimes(1);
       expect(prismaMock.product.findMany).toHaveBeenCalledWith({
         select: {
@@ -231,61 +281,61 @@ describe('ProductsService', () => {
 
     it(`should update an existing product`, async () => {
       const existingProductId = 1;
-    
+
       jest.spyOn(prismaMock.product, 'findUnique').mockResolvedValue(fakeProducts[0]);
-    
+
       const updateProductDto = {
         name: 'Novo Nome do Produto',
         category: 'nova-categoria',
         image_url: 'https://example.com/new-image.jpg',
       };
-    
+
       const response = await service.update(existingProductId, updateProductDto);
-    
+
       // Verifica se o produto foi atualizado corretamente
       expect(response).toEqual({ message: 'Produto alterado com sucesso.' });
-    
+
       expect(prismaMock.product.findUnique).toHaveBeenCalledTimes(1);
       expect(prismaMock.product.findUnique).toHaveBeenCalledWith({
         where: { id: existingProductId },
       });
-    
+
       expect(prismaMock.product.update).toHaveBeenCalledTimes(1);
       expect(prismaMock.product.update).toHaveBeenCalledWith({
         where: { id: existingProductId },
         data: updateProductDto,
       });
     });
-    
+
   });
 
   describe('deleteProducts', () => {
 
     it(`should remove an existing product`, async () => {
       const existingProductId = 1;
-    
+
       jest.spyOn(prismaMock.product, 'findUnique').mockResolvedValue(fakeProducts[0]);
-    
+
       const response = await service.remove(existingProductId);
-    
+
       expect(response).toEqual({ message: 'Produto excluído com sucesso.' });
-    
+
       expect(prismaMock.product.findUnique).toHaveBeenCalledTimes(1);
       expect(prismaMock.product.findUnique).toHaveBeenCalledWith({
         where: { id: existingProductId },
       });
-    
+
       expect(prismaMock.product.delete).toHaveBeenCalledTimes(1);
       expect(prismaMock.product.delete).toHaveBeenCalledWith({
         where: { id: existingProductId },
       });
     });
-    
+
     it(`should throw an HttpException when trying to remove a non-existent product`, async () => {
       const nonExistentProductId = 9999;
-    
+
       jest.spyOn(prismaMock.product, 'findUnique').mockResolvedValue(null);
-    
+
       try {
         await service.remove(nonExistentProductId);
       } catch (error) {
@@ -293,16 +343,16 @@ describe('ProductsService', () => {
         expect(error.message).toBe('Produto inválido.');
         expect(error.getStatus()).toBe(HttpStatus.BAD_REQUEST);
       }
-    
+
       expect(prismaMock.product.findUnique).toHaveBeenCalledTimes(1);
       expect(prismaMock.product.findUnique).toHaveBeenCalledWith({
         where: { id: nonExistentProductId },
       });
-    
+
       expect(prismaMock.product.delete).not.toHaveBeenCalled();
     });
-    
+
 
   })
-  
+
 });

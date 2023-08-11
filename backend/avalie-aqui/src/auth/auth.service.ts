@@ -5,6 +5,7 @@ import { JwtAdminPayload, JwtUserPayload } from './auth.types';
 import { User, AdminUser } from '@prisma/client';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { AdminUserService } from '../admin_user/admin_user.service';
 import {
   BadRequestException,
   Injectable,
@@ -18,18 +19,20 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     private prisma: PrismaService,
-  ) {}
+    private adminUserService: AdminUserService,
+  ) { }
 
   /**
    * Valida o usuário
    * @param email string
    * @returns
    */
-  async validateUser(email: string): Promise<Omit<User, 'password'>> {
-    const user = await this.userService.getByEmail(email);
+  async validateUser(
+    userId: number,
+  ): Promise<Omit<User, 'password' | 'createdAt' | 'updatedAt'>> {
+    const user = await this.userService.getUser({ user: { id: userId } });
     if (user) {
-      const { password, ...result } = user;
-      return result;
+      return user;
     }
     return null;
   }
@@ -39,11 +42,14 @@ export class AuthService {
    * @param email string
    * @returns
    */
-  async validateAdmin(email: string): Promise<Omit<AdminUser, 'password'>> {
-    const admin = await this.userService.getAdminByEmail(email);
+  async validateAdmin(
+    adminId: number,
+  ): Promise<Omit<AdminUser, 'password' | 'createdAt' | 'updatedAt'>> {
+    const admin = await this.adminUserService.getAdmin({
+      user: { id: adminId },
+    });
     if (admin) {
-      const { password, ...result } = admin;
-      return result;
+      return admin;
     }
     return null;
   }
@@ -73,11 +79,11 @@ export class AuthService {
    * @returns
    */
   private async validateRefreshToken(type: string, refreshToken: string) {
-    const email = this.jwtService.decode(refreshToken)['email'];
+    const id = this.jwtService.decode(refreshToken)['id'];
     const user =
       type == 'user'
-        ? await this.validateUser(email)
-        : await this.validateAdmin(email);
+        ? await this.validateUser(id)
+        : await this.validateAdmin(id);
 
     if (!user) {
       throw new BadRequestException('Usuário não encontrado');

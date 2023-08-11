@@ -6,7 +6,7 @@ import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   /**
    * Cadastrar um novo usuário
@@ -164,23 +164,5 @@ export class UserService {
     });
 
     return !!user;
-  }
-
-  //Busca usuário pelo email
-  async getByEmail(email: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
-  }
-
-  //Busca admin pelo email
-  async getAdminByEmail(email: string) {
-    return await this.prisma.adminUser.findUnique({
-      where: {
-        email: email,
-      },
-    });
   }
 }
