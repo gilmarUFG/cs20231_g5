@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Avatar, Button, Toolbar, Typography } from '@mui/material';
+import { AppBar, Avatar, Button, Grid, Toolbar, Typography } from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
 import memories from '../../images/avalie.png';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function Navbar() {
   const storedProfile = JSON.parse(localStorage.getItem('profile'));
@@ -34,7 +35,7 @@ export default function Navbar() {
   }, [location]);
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#006064' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#30404F' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <div sx={{ display: 'flex', alignItems: 'center' }}>
           <img src={memories} alt="icon" height="60" sx={{ marginRight: '5px' }} />
@@ -50,7 +51,7 @@ export default function Navbar() {
           >
             Home
           </Button>
-          {user.name === "Admin" ? (
+          {user.email === "admin@avalieaqui.com" ? (
           <Button
             component={Link}
             to="/cadprod"
@@ -61,22 +62,49 @@ export default function Navbar() {
         </div>
         {user && user.name ? (
           <div sx={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar sx={{ bgcolor: '#FF4081', marginRight: '10px' }}>
-              {user.name.charAt(0)}
-            </Avatar>
-            <div sx={{ marginRight: '10px' }}>
-              <Typography variant="h6" sx={{ color: 'white' }}>
-                {user.name}
-              </Typography>
-            </div>
-            <Button
+            <Grid container justifyContent={"center"} alignItems={"center"} columns={8}>
+            <Grid item  xs={5}>
+              <Grid container justifyContent={"center"} alignItems={"center"} direction={"column"} columns={8}>
+                <Grid item xs={5}>
+                        <Button
+                    variant="outlined"
+                    //sx={{ marginLeft: '10px', height: '32px', fontSize: '12px' }}
+                    color="secondary"
+                    component={Link}
+                    rounded
+                    sx={{ bgcolor: '#FF4081', color:"white", borderRadius: 100 }}
+                    to="/editUser"
+                    //onClick={navigate('/editUser')}
+                  >              
+                      {user.name.charAt(0)}              
+                  </Button> 
+                </Grid>
+
+                <Grid item xs={3}>
+                    <Typography variant="h6" sx={{ color: 'white' }}>
+                      {user.name}
+                    </Typography>
+                </Grid>
+
+             </Grid>   
+            </Grid>
+            <Grid item xs={2}>
+              <Grid
               variant="contained"
-              sx={{ marginLeft: '10px', height: '32px', fontSize: '12px' }}
+              sx={{  height: '100%', width: "100%", fontSize: '12px' }}
               color="secondary"
               onClick={logout}
             >
-              Sair
-            </Button>
+              <LogoutIcon/>
+              <Typography variant="h6" sx={{ color: 'white' }}>
+                Sair
+              </Typography>
+              
+            </Grid>
+            </Grid>
+            
+
+            </Grid>
           </div>
         ) : (
           <Button

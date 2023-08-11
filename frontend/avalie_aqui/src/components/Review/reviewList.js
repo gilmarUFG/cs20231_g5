@@ -5,11 +5,13 @@ import { Avatar, Grid, Paper, IconButton, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import AvalieAqui from "../Produtos/Produto/avalieAqui";
 import ReviewComponent from "./doReview";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const imgLink =
   "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
 
-const ReviewList = ({ productId }) => {
+const ReviewList = ({ productId, user }) => {
   const [reviews, setReviews] = useState([]);
   const [currentComment, setCurrentComment] = useState(0);
   const [showReviewComponent, setShowReviewComponent] = useState(false); // New state to track the review component visibility
@@ -29,7 +31,14 @@ const ReviewList = ({ productId }) => {
   }, [productId]);
 
   const handleAvalieAquiClick = () => {
-    setShowReviewComponent(true); // Show the review component when the button is clicked
+
+    if(user.name){
+      setShowReviewComponent(true); // Show the review component when the button is clicked
+    }
+    else{
+      toast.error('É necessário estar logado para Avaliar Aqui!!!');
+    }
+    
   };
 
   const handleNextComment = () => {
@@ -45,7 +54,37 @@ const ReviewList = ({ productId }) => {
   };
 
   if (reviews === undefined || reviews.length === 0) {
-    return <div>Carregando...</div>;
+    return (
+      <Grid>
+      {showReviewComponent ? (
+        // If showReviewComponent is true, render the ReviewComponent
+        <ReviewComponent productId={productId} />
+      ) : (<Paper
+        //key={review.id}
+        sx={{
+          width: "100%",
+          height: "170px", // Define a altura fixa para o Paper
+          backgroundColor: "#30404F",
+          border: "3px solid black",
+          paddingTop: "20px",
+          paddingBottom: "20px",
+          paddingLeft: "50px",
+          paddingRight: "50px",
+         
+        }}
+      >
+        <Typography variant="h5" style={{ textAlign: "left", marginLeft: 10 }}>
+          - Seja o Primeior à Avaliar!
+        </Typography>
+        <Grid onClick={handleAvalieAquiClick}>
+                       <AvalieAqui />
+        </Grid>
+  
+  
+      </Paper>)}
+    </Grid>
+    
+    );
   }
 
   return (
@@ -155,6 +194,7 @@ const ReviewList = ({ productId }) => {
           </IconButton>
         </Grid>
       )}
+       <ToastContainer position="top-right" autoClose={5000} hideProgressBar />
     </Grid>
   );
 };

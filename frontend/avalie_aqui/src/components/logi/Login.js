@@ -48,6 +48,11 @@ const onSubmit = async (data, event) => {
         dispatch({ type: AUTH, data: responseData });
         console.log("Sucesso ao logar como Administrador!", response);
         navigate('/home');
+    
+        // Recarregar a página após o redirecionamento ter sido completado
+        window.onload = function () {
+          window.location.replace('/home'); // Use replace em vez de reload
+        };
       } else {
         console.error("Resposta inválida:", response);
       }
@@ -59,6 +64,13 @@ const onSubmit = async (data, event) => {
         dispatch({ type: AUTH, data: responseData });
         console.log("Sucesso!", response);
         navigate('/home');
+    
+    // Recarregar a página após o redirecionamento ter sido completado
+    window.onload = function () {
+      window.location.replace('/home'); // Use replace em vez de reload
+    };
+
+     
       } else {
         console.error("Resposta inválida:", response);
       }

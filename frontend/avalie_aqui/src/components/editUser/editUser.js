@@ -20,10 +20,10 @@ import decode from 'jwt-decode';
 import { AUTH } from '../../constants/actionTypes.js';
 
 const schema = z.object({
-  name: z.string().nonempty('Name is required'),
-  cpf: z.string().nonempty('CPF is required'),
-  email: z.string().email('Invalid email').nonempty('Email is required'),
-  password: z.string().min(8, 'Password must be at least 8 characters').nonempty('Password is required'),
+  name: z.string(),
+  cpf: z.string(),
+  email: z.string(),
+  password: z.string(),
 });
 
 const defaultTheme = createTheme();
@@ -55,22 +55,43 @@ export default function EditUser() {
     mode: 'onBlur',
   });
 
+ 
+
   const onSubmit = async (data, event) => {
     event.preventDefault();
     
     
     //console.log(data);
     
-    try {       
+    //try {
+      
 
-      const response = await api.putUserById({id:user.id,name: data.name, cpf: data.cpf, email: data.email, password: data.password });
-      dispatch({ type: AUTH, data: response });
+    let nameenv = '';
+    if (data.name !== null && data.name !=='') nameenv = ',"name":"' + data.name + '"';
+    let cpfenv = '';
+    if (data.cpf !== null && data.cpf!=='') cpfenv = ',"cpf":"' + data.cpf + '"';
+    let emailenv = '';
+    if (data.email !== null && data.email!=='') emailenv = ',"email":"' + data.email + '"';
+    let passenv = '';
+    if (data.password !== null&& data.password!=='') passenv = ',"password":"' + data.password + '"';
+    
+    const gerenv = '{ "id":"' + user.id + '"' + nameenv + cpfenv + emailenv + passenv + '}';
+    
+      console.log(gerenv)
+      const response = await api.putUserById(gerenv);
+
+    
       console.log("Sucesso!", response);
-      navigate('/home');
-      window.location.reload();
-    } catch (error) {
-      console.error("Falha:", error.response.data);
-    }
+    
+      navigate('/login');
+    
+      // Recarregar a página somente após o redirecionamento ter sido completado
+      window.onload = function () {
+        window.location.reload();
+      };
+    /*} catch (error) {
+      console.error("Falha:", error.response);
+    }*/
   };
 
   const navigate = useNavigate();

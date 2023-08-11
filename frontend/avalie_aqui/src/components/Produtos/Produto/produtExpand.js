@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from 'react';
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -6,23 +6,24 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import ReviewComponent from "../../Review/doReview.js";
 import * as api from "../../../api/index";
 import ReactStars from "react-star-ratings";
-import { SwipeLeft } from "@mui/icons-material";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { relative } from "path-browserify";
 import ReviewList from "../../Review/reviewList.js";
 import UpDateProd from "../Update/updtProdForm.js";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import decode from 'jwt-decode';
 
 // ... rest of the code ...
 
-const ProductImage = ({ imageUrl, onEditClick }) => {
+const ProductImage = ({ imageUrl, onEditClick,user }) => {
+ 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  
 
   return (
     <Grid
@@ -41,7 +42,8 @@ const ProductImage = ({ imageUrl, onEditClick }) => {
         }}
         image={imageUrl || "https://source.unsplash.com/random?wallpapers"}
       />
-      <EditSharpIcon
+
+      {user.email == 'admin@avalieaqui.com'?( <EditSharpIcon
         onClick={onEditClick}
         style={{
           position: "absolute",
@@ -54,7 +56,8 @@ const ProductImage = ({ imageUrl, onEditClick }) => {
           color: "black",
           fontSize: isSmallScreen ? "18px" : "24px",
         }}
-      />
+      />):(<a></a>)}
+     
     </Grid>
   );
 };
@@ -93,6 +96,8 @@ const ExpandedProduto = ({ produto, onClose }) => {
   const [showReview, setShowReview] = React.useState(false);
   const [avgprod, setAvgProd] = React.useState(0.0);
   const [reviews, setReviews] = React.useState([]);
+  const storedProfile = JSON.parse(localStorage.getItem('profile'));
+  const [user, setUser] = useState(storedProfile || {});
   const [isEditMode, setIsEditMode] = React.useState(false); // State to track edit mode
 
   const handleEditClick = () => {
@@ -110,7 +115,20 @@ const ExpandedProduto = ({ produto, onClose }) => {
     }
   };
 
-  React.useEffect(() => {
+  React.useEffect(() => {  
+  
+    const token = user?.access_token;
+
+    if (token) {
+      console.log(token);
+      
+      const decodeToken = decode(token);     
+
+      setUser(decodeToken);
+      console.log(decodeToken);
+    }
+
+
     const fetchProdutos = async () => {
       try {
         const produtomed = await api.getProductByProductId(produto.id);
@@ -150,6 +168,7 @@ const ExpandedProduto = ({ produto, onClose }) => {
               <ProductImage
                 imageUrl={produto.image_url}
                 onEditClick={handleEditClick}
+                user={user}
               />
             )}
           </Grid>
@@ -164,7 +183,7 @@ const ExpandedProduto = ({ produto, onClose }) => {
                 />
               </Grid>
               <Grid item xs={12} sm={12}  style={{ marginBottom: "-1px" }}>
-                <ReviewList productId={produto.id} />
+                <ReviewList productId={produto.id} user={user} />
               </Grid>
               <Grid item xs={12} sm={10}>
 

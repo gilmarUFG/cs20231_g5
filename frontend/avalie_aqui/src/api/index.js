@@ -14,15 +14,15 @@ export const signInadm = (formData) => api.post('/auth/admin/login', formData);
 export const signUp = (formData) => api.post('/user/register', formData);
 
 export const putUserById = async (formData) => {
-  const putProdApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
+  const putUserApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
   
   const profile = JSON.parse(localStorage.getItem('profile'));
   const token = profile?.access_token;
   if (localStorage.getItem('profile')) {
-    putProdApi.defaults.headers.common.Authorization = `Bearer ${token}`;
+    putUserApi.defaults.headers.common.Authorization = `Bearer ${token}`;
   }
   
-  const response = await putProdApi.put(`/user`, formData);
+  const response = await putUserApi.put(`/user`, formData);
   return response.data;
 };
 
