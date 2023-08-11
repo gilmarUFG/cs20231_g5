@@ -22,11 +22,14 @@ export default function Navbar() {
     const token = user?.access_token;
 
     if (token) {
+      console.log(token);
+      
       const decodeToken = decode(token);
 
       if (decodeToken.exp * 1000 < new Date().getTime()) logout();
 
       setUser(decodeToken);
+      console.log(decodeToken);
     }
   }, [location]);
 
@@ -47,13 +50,14 @@ export default function Navbar() {
           >
             Home
           </Button>
+          {user.name === "Admin" ? (
           <Button
             component={Link}
             to="/cadprod"
             sx={{ color: location.pathname === '/cadastro-produtos' ? 'white' : '#B2EBF2' }}
           >
             Cadastro de Produtos
-          </Button>
+          </Button>):(<a></a>)}
         </div>
         {user && user.name ? (
           <div sx={{ display: 'flex', alignItems: 'center' }}>

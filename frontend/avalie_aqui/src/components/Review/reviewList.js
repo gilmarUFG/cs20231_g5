@@ -18,7 +18,7 @@ const ReviewList = ({ productId }) => {
     const fetchReviews = async () => {
       try {
         const revisoes = await api.getReviewsByProductId(productId);
-        console.log(revisoes);
+        //console.log(revisoes);
         setReviews(revisoes.reviews);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);

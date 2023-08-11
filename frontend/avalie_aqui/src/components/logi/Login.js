@@ -37,7 +37,7 @@ export default function Login() {
 
 const onSubmit = async (data, event) => {
   event.preventDefault();
-  console.log(data);
+  //console.log(data);
   
   try {
     if (data.email === 'admin@avalieaqui.com') {

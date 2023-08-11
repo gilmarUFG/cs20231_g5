@@ -25,7 +25,7 @@ export default function CadProd() {
 
   const onSubmit = async (data, event) => {
     event.preventDefault();
-    console.log(data);
+    //console.log(data);
   
     try {
       

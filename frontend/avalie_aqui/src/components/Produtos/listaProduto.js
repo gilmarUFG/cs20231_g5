@@ -36,7 +36,7 @@ export default function Album() {
     const fetchProdutos = async () => {
       try {
         const produtos = await api.getProdutos();
-        console.log(produtos);
+        //console.log(produtos);
         setCards(produtos.data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);

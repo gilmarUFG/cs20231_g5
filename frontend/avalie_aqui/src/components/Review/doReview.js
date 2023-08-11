@@ -5,6 +5,8 @@ import { useLocation } from "react-router-dom";
 import decode from "jwt-decode";
 import * as api from "../../api/index.js";
 import Rating from "@mui/material/Rating";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ReviewSchema = z.object({
   rating: z.number().min(1).max(5),
@@ -39,12 +41,12 @@ const ReviewComponent = ({ productId }) => {
     try {
       const validReviewData = ReviewSchema.parse(reviewData);
 
-      console.log({
-        reviewerId: user.id, // You can set the reviewer data here
-        ratedProductId: productId,
-        rating: parseFloat(rating),
-        comments: validReviewData.comments,
-      });
+      // console.log({
+      //   reviewerId: user.id, // You can set the reviewer data here
+      //   ratedProductId: productId,
+      //   rating: parseFloat(rating),
+      //   comments: validReviewData.comments,
+      // });
       api
         .doReview({
           reviewerId: 1, // You can set the reviewer data here
@@ -54,7 +56,13 @@ const ReviewComponent = ({ productId }) => {
         })
         .then((response) => {
           console.log("Review saved successfully:", response);
+
           // Additional logic after saving the review
+          toast.success('Produto avaliado com sucesso!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+          
         })
         .catch((error) => {
           console.error("Error saving review:", error);
@@ -136,6 +144,7 @@ const ReviewComponent = ({ productId }) => {
         />
       </Grid>
       </Grid> 
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar />
     </Paper>
   );
 };
