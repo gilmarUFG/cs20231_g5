@@ -87,7 +87,7 @@ export default function Album() {
             </Stack>
           </Container>
         </Box>
-        <Container sx={{ py: 10, backgroundColor: '#30404F' }} maxWidth="120%">
+        <Container sx={{ py: 10, backgroundImage: "url(https://media.giphy.com/media/U3qYN8S0j3bpK/giphy.gif)", }} maxWidth="120%">
   <Grid container spacing={4}>
     {cards.map((card) => (
       <Grid item key={card} xs={12} sm={8} md={4}>
