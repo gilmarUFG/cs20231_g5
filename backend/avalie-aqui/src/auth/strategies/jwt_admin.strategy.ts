@@ -16,7 +16,7 @@ export class JwtAdminStrategy extends PassportStrategy(Strategy, 'jwt_admin') {
   }
 
   async validate(payload: JwtAdminPayload) {
-    const admin = await this.authService.validateAdmin(payload.email);
+    const admin = await this.authService.validateAdmin(payload.id);
     if (!admin) {
       throw new UnauthorizedException();
     }

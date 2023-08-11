@@ -82,13 +82,4 @@ export class AdminUserService {
 
     return !!admin;
   }
-
-  //Busca admin pelo email
-  async getAdminByEmail(email: string) {
-    return await this.prisma.adminUser.findUnique({
-      where: {
-        email: email,
-      },
-    });
-  }
 }
