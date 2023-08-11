@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, Button, Typography, Container, Paper, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
+import { useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import * as api from '../../../api/index';
@@ -18,6 +19,9 @@ const schema = z.object({
 const defaultTheme = createTheme();
 
 export default function CadProd() {
+  const navigate = useNavigate();
+ 
+
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onBlur',
@@ -25,7 +29,7 @@ export default function CadProd() {
 
   const onSubmit = async (data, event) => {
     event.preventDefault();
-    console.log(data);
+    //console.log(data);
   
     try {
       
@@ -40,6 +44,12 @@ export default function CadProd() {
       console.log("Token acessado:  ",token);
       const response = await api.cadProd(data);
       console.log('Sucesso!', response);
+      navigate('/home');
+    
+      // Recarregar a página somente após o redirecionamento ter sido completado
+      window.onload = function () {
+        window.location.reload();
+      };
     } catch (error) {
       
       console.error('Falha:', error.response.data);

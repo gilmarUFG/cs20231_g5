@@ -5,6 +5,8 @@ import SignUp from './components/signup/SignUp';
 import CadProd from './components/Produtos/Cadastro/cadastraProduto';
 import Album from './components/Produtos/listaProduto';
 import Navbar from './components/NavBar/appBar';
+import EditUser from './components/editUser/editUser';
+import CriaAdmin from './components/signup/CriaAdmin';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/cadprod" element={<CadProd />} />
+        <Route path="/editUser" element={<EditUser/>} />
+        <Route path="/criAdmin" element={<CriaAdmin/>} />
         <Route path="/home" element={<Album />} />
       </Routes>
     </BrowserRouter>
