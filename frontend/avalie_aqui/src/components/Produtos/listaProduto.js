@@ -19,7 +19,7 @@ function Copyright() {
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        AVALIE
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -36,7 +36,7 @@ export default function Album() {
     const fetchProdutos = async () => {
       try {
         const produtos = await api.getProdutos();
-        console.log(produtos);
+        //console.log(produtos);
         setCards(produtos.data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
@@ -87,7 +87,7 @@ export default function Album() {
             </Stack>
           </Container>
         </Box>
-        <Container sx={{ py: 10, backgroundColor: '#30404F' }} maxWidth="120%">
+        <Container sx={{ py: 10, backgroundImage: "url(https://media.giphy.com/media/U3qYN8S0j3bpK/giphy.gif)", }} maxWidth="120%">
   <Grid container spacing={4}>
     {cards.map((card) => (
       <Grid item key={card} xs={12} sm={8} md={4}>
@@ -100,7 +100,7 @@ export default function Album() {
       </main>
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
-          Footer
+          Avaliare
         </Typography>
         <Typography
           variant="subtitle1"
@@ -108,7 +108,7 @@ export default function Album() {
           color="text.secondary"
           component="p"
         >
-          Something here to give the footer a purpose!
+          Seu site de Controle de Qualidade, AVALIE AQUI!!!
         </Typography>
         <Copyright />
       </Box>

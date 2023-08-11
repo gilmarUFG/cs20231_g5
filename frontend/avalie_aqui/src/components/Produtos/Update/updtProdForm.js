@@ -27,7 +27,7 @@ export default function UpDateProd({ produto }) {
 
   const onSubmit = async (data, event) => {
     event.preventDefault();
-    console.log(data);
+   // console.log(data);
 
     try {
       const profile = JSON.parse(localStorage.getItem('profile'));

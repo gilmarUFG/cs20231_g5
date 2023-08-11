@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -15,38 +15,83 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as api from '../../api/index.js';
+import { useDispatch } from 'react-redux';
+import decode from 'jwt-decode';
+import { AUTH } from '../../constants/actionTypes.js';
 
 const schema = z.object({
-  name: z.string().nonempty('Name is required'),
-  cpf: z.string().nonempty('CPF is required'),
-  email: z.string().email('Invalid email').nonempty('Email is required'),
-  password: z.string().min(8, 'Password must be at least 8 characters').nonempty('Password is required'),
+  name: z.string(),
+  cpf: z.string(),
+  email: z.string(),
+  password: z.string(),
 });
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+const useUser = () => {
+    const storedProfile = JSON.parse(localStorage.getItem('profile'));
+    const [user, setUser] = useState(storedProfile || {});
+    
+    useEffect(() => {
+      const token = user?.access_token;
+  
+      if (token) {
+        const decodeToken = decode(token);
+        setUser(decodeToken);
+      }
+    }, [user?.access_token]);
+  
+    return user;
+  };
+
+export default function EditUser() {
+
+    const dispatch = useDispatch();
+    const user = useUser();
+    
+
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onBlur',
   });
 
+ 
+
   const onSubmit = async (data, event) => {
     event.preventDefault();
+    
+    
     //console.log(data);
     
-    try {
-      const response = await api.signUp({name: data.name, cpf: data.cpf, email: data.email, password: data.password });
+    //try {
+      
+
+    let nameenv = '';
+    if (data.name !== null && data.name !=='') nameenv = ',"name":"' + data.name + '"';
+    let cpfenv = '';
+    if (data.cpf !== null && data.cpf!=='') cpfenv = ',"cpf":"' + data.cpf + '"';
+    let emailenv = '';
+    if (data.email !== null && data.email!=='') emailenv = ',"email":"' + data.email + '"';
+    let passenv = '';
+    if (data.password !== null&& data.password!=='') passenv = ',"password":"' + data.password + '"';
+    
+    const gerenv = '{ "id":"' + user.id + '"' + nameenv + cpfenv + emailenv + passenv + '}';
+    
+      console.log(gerenv)
+      const response = await api.putUserById(gerenv);
+
+    
       console.log("Sucesso!", response);
+    
       navigate('/login');
     
       // Recarregar a página somente após o redirecionamento ter sido completado
       window.onload = function () {
         window.location.reload();
       };
-    } catch (error) {
-      console.error("Falha:", error.response.data);
-    }
+    /*} catch (error) {
+      console.error("Falha:", error.response);
+    }*/
   };
 
   const navigate = useNavigate();
@@ -71,7 +116,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Editar Usuário
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>

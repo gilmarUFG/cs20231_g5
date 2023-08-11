@@ -27,9 +27,9 @@ const Produto = ({ produto }) => {
     const fetchProdutos = async () => {
       try {
         const reviewavg = await api.getReviewsByProductId(produto.id);
-        console.log(reviewavg);
+       // console.log(reviewavg);
         const produtomed = await api.getProductByProductId(produto.id);
-        console.log(produtomed);
+       // console.log(produtomed);
         // Verificar se o valor de produtomed.product.average_rating é válido antes de definir avgprod
         setAvgProd(produtomed.product.average_rating || 0);
       } catch (error) {

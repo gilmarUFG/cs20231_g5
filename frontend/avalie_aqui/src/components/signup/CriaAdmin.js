@@ -18,14 +18,13 @@ import * as api from '../../api/index.js';
 
 const schema = z.object({
   name: z.string().nonempty('Name is required'),
-  cpf: z.string().nonempty('CPF is required'),
   email: z.string().email('Invalid email').nonempty('Email is required'),
   password: z.string().min(8, 'Password must be at least 8 characters').nonempty('Password is required'),
 });
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function CriaAdmin() {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onBlur',
@@ -36,7 +35,7 @@ export default function SignUp() {
     //console.log(data);
     
     try {
-      const response = await api.signUp({name: data.name, cpf: data.cpf, email: data.email, password: data.password });
+      const response = await api.signUp({name: data.name, email: data.email, password: data.password });
       console.log("Sucesso!", response);
       navigate('/login');
     
@@ -71,7 +70,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Sign up Admin
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -89,19 +88,7 @@ export default function SignUp() {
                   helperText={errors.name?.message}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="cpf"
-                  label="CPF do Usuário"
-                  name="cpf"
-                  autoComplete="family-name"
-                  {...register('cpf')}
-                  error={!!errors.cpf}
-                  helperText={errors.cpf?.message}
-                />
-              </Grid>
+              
               <Grid item xs={12}>
                 <TextField
                   required
@@ -136,7 +123,7 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Sign Up Admin
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

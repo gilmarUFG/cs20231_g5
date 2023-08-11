@@ -12,6 +12,20 @@ api.interceptors.request.use((req) => {
 export const signIn = (formData) => api.post('/auth/login', formData);
 export const signInadm = (formData) => api.post('/auth/admin/login', formData);
 export const signUp = (formData) => api.post('/user/register', formData);
+export const signAdmin = (formData) => api.post('/admin/register', formData);
+
+export const putUserById = async (formData) => {
+  const putUserApi = axios.create({ baseURL: process.env.REACT_APP_PORT });
+  
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  const token = profile?.access_token;
+  if (localStorage.getItem('profile')) {
+    putUserApi.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+  
+  const response = await putUserApi.put(`/user`, formData);
+  return response.data;
+};
 
 export const getProdutos = () => api.get('/products');
 
