@@ -6,11 +6,13 @@ import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { JwtUserStrategy } from './strategies/jwt_user.strategy';
+import { AdminUserModule } from '../admin_user/admin_user.module';
 import { JwtAdminStrategy } from './strategies/jwt_admin.strategy';
 
 @Module({
   imports: [
     UserModule,
+    AdminUserModule,
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
@@ -20,4 +22,4 @@ import { JwtAdminStrategy } from './strategies/jwt_admin.strategy';
   providers: [AuthService, JwtAdminStrategy, JwtUserStrategy],
   controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule { }
