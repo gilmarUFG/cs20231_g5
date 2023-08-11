@@ -1,14 +1,8 @@
-import * as bcrypt from 'bcrypt';
-import {
-  HttpException,
-  HttpStatus,
-  UnprocessableEntityException,
-} from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma/prisma.service';
-import { User } from '@prisma/client';
 import { UpdateUserDto } from './dto';
 import { UserService } from './user.service';
+import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from '../prisma/prisma.service';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 const prismaServiceMock = {
   user: {
@@ -21,7 +15,10 @@ const prismaServiceMock = {
       }),
     ),
     findUnique: jest.fn((data) => {
-      if (data.where.email === 'usuario@avalieaqui.com') {
+      if (
+        data.where.email === 'usuario@avalieaqui.com' ||
+        data.where.cpf === '26601201103'
+      ) {
         return Promise.resolve({
           id: 2,
           name: 'Usuario Existente',
@@ -47,7 +44,7 @@ const prismaServiceMock = {
 const registerUserDto = {
   name: 'Jhon Doe',
   email: 'jhondoe@avalieaqui.com.br',
-  cpf: '944.648.021-33',
+  cpf: '94464802133',
   password: '123456a',
 };
 
@@ -102,7 +99,7 @@ describe('UserService', () => {
 
     it('should throw an error if cpf already exists', async () => {
       await expect(
-        userService.register({ ...registerUserDto, cpf: '94464802133' }),
+        userService.register({ ...registerUserDto, cpf: '26601201103' }),
       ).rejects.toThrowError(
         new HttpException(
           'O CPF especificado já está em uso.',
