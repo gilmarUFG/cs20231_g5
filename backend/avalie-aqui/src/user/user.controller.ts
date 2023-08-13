@@ -4,11 +4,12 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RegisterUserDto } from './dto';
+import { RegisterUserDto, UpdateUserDto } from './dto';
 import {
   ApiAcceptedResponse,
   ApiBadRequestResponse,
@@ -164,5 +165,55 @@ export class UserController {
   })
   getReviews(@Param('id') id: string) {
     return this.userService.getReviews(+id);
+  }
+
+  // Cadastrar um novo usuário
+  @Put('')
+  @UseGuards(JwtUserAuthGuard)
+  @ApiBearerAuth('User access-token')
+  @ApiAcceptedResponse({
+    // Documentação da resposta pro swagger
+    description: 'Dados atualizados com sucesso',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            message: 'Usuário atualizado com sucesso.',
+          },
+        },
+      },
+    },
+  })
+  @ApiForbiddenResponse({
+    // Documentação da resposta pro swagger
+    description: 'Caso o email/CPF já estiverem em uso',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            statusCode: 403,
+            message: 'O Email/CPF especificado já está em uso.',
+          },
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    // Documentação da resposta pro swagger
+    description: 'Erro ao atualizar dados do usuário',
+    content: {
+      'application/json': {
+        schema: {
+          example: {
+            statusCode: 500,
+            message:
+              'Não foi possível atualizar dados do usuário. Tente novamente mais tarde.',
+          },
+        },
+      },
+    },
+  })
+  update(@Request() req: any, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(req, updateUserDto);
   }
 }

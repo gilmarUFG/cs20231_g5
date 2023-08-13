@@ -33,11 +33,17 @@ export default function SignUp() {
 
   const onSubmit = async (data, event) => {
     event.preventDefault();
-    console.log(data);
+    //console.log(data);
     
     try {
       const response = await api.signUp({name: data.name, cpf: data.cpf, email: data.email, password: data.password });
       console.log("Sucesso!", response);
+      navigate('/login');
+    
+      // Recarregar a página somente após o redirecionamento ter sido completado
+      window.onload = function () {
+        window.location.reload();
+      };
     } catch (error) {
       console.error("Falha:", error.response.data);
     }

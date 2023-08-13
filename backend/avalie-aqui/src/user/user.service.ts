@@ -1,12 +1,12 @@
 import * as bcrypt from 'bcrypt';
-import { RegisterUserDto } from './dto';
+import { RegisterUserDto, UpdateUserDto } from './dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   /**
    * Cadastrar um novo usuário
@@ -65,7 +65,7 @@ export class UserService {
    * @returns object
    */
   getUser(req: any) {
-    let user: User = req.user;
+    const user: User = req.user;
     return this.prisma.user.findUnique({
       where: {
         id: user.id,
@@ -111,10 +111,32 @@ export class UserService {
       if (productReviews) {
         return productReviews;
       }
-      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
     } catch (error) {
       throw new HttpException(
         'Falha ao obter as avaliações do produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * Atualiza os dados de uma avaliação
+   * @param updateUserDto
+   * @returns
+   */
+  async update(req: any, updateUserDto: Partial<UpdateUserDto>) {
+    const user: User = req.user;
+    try {
+      // Atualiza os dados da avaliação
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: updateUserDto,
+      });
+      return { message: 'Usuário atualizado com sucesso.' };
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao atualizar dados do usuário. Tente novamente mais tarde.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -142,23 +164,5 @@ export class UserService {
     });
 
     return !!user;
-  }
-
-  //Busca usuário pelo email
-  async getByEmail(email: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
-  }
-
-  //Busca admin pelo email
-  async getAdminByEmail(email: string) {
-    return await this.prisma.adminUser.findUnique({
-      where: {
-        email: email,
-      },
-    });
   }
 }

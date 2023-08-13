@@ -1,15 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 import {
-  IsDecimal,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsString,
   MaxLength,
-  isNotEmpty,
 } from 'class-validator';
-import { Product } from 'src/products/entities/product.entity';
-
 export class CreateReviewDto {
   @IsNotEmpty()
   @IsInt()
@@ -32,7 +28,7 @@ export class CreateReviewDto {
   ratedProductId: number;
 
   @IsNotEmpty()
-  @IsDecimal()
+  @IsNumber({ maxDecimalPlaces: 1 })
   @ApiProperty({
     description: 'Nota de Avaliação',
     type: 'float',

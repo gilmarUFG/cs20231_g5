@@ -27,7 +27,7 @@ export class ProductsService {
 
     try {
       // Cadastrar o usuário
-      let product = await this.prisma.product.create({
+      const product = await this.prisma.product.create({
         data: createProductDto,
         select: {
           id: true,
@@ -100,13 +100,13 @@ export class ProductsService {
       if (productReviews) {
         return productReviews;
       }
-      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
     } catch (error) {
       throw new HttpException(
         'Falha ao obter as avaliações do produto. Tente novamente mais tarde.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
   /**
@@ -114,9 +114,9 @@ export class ProductsService {
    * @param id integer
    * @returns Product
    */
-  findOne(id: number) {
+  async findOne(id: number) {
     try {
-      const product = this.prisma.product.findUnique({
+      const product = await this.prisma.product.findUnique({
         where: {
           id: id,
         },
@@ -127,30 +127,101 @@ export class ProductsService {
           image_url: true,
         },
       });
+
       if (product) {
-        return product;
+        const ratingData = await this.prisma.review.aggregate({
+          where: {
+            ratedProductId: id,
+          },
+          _avg: {
+            rating: true,
+          },
+          _count: {
+            id: true,
+          },
+        });
+
+        return {
+          product: {
+            ...product,
+            average_rating: ratingData._avg.rating,
+            count_ratings: ratingData._count.id,
+          },
+        };
       }
-      throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
     } catch (error) {
       throw new HttpException(
         'Falha ao obter dados do produto. Tente novamente mais tarde.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  /**
+   * Atualiza os dados de um produto
+   * @param id
+   * @param updateProductDto
+   * @returns
+   */
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    try {
+      const product = await this.prisma.product.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (product) {
+        // Atualizar o produto
+        await this.prisma.product.update({
+          where: { id: id },
+          data: updateProductDto,
+        });
+        return { message: 'Produto alterado com sucesso.' };
+      }
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao atualizar dados do produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  /**
+   * Delete um produto
+   * @param id
+   * @returns
+   */
+  async remove(id: number) {
+    try {
+      const product = await this.prisma.product.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (product) {
+        // Excluir o produto
+        await this.prisma.product.delete({
+          where: { id: id },
+        });
+        return { message: 'Produto excluído com sucesso.' };
+      }
+    } catch (error) {
+      throw new HttpException(
+        'Falha ao excluir produto. Tente novamente mais tarde.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    throw new HttpException('Produto inválido.', HttpStatus.BAD_REQUEST);
   }
 
   // --------------------------------------------------
 
   // Verifica se o nome já existe
-  private async nameExists(name: string) {
+  public async nameExists(name: string) {
     const user = await this.prisma.product.findUnique({
       where: {
         name: name,
